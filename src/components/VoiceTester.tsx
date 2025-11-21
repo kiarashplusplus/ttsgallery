@@ -202,30 +202,31 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           })
           
           // Play and wait for completion
-          try {
-            await audio.play()
-          } catch (playError) {
+          const playResult = await audio.play().catch((playError) => {
             console.error(`Failed to start playback for ${voiceList[i].name}:`, playError)
-            throw playError // Re-throw to be caught by outer try-catch
-          }
-          
-          await new Promise<void>((resolve) => {
-            const onEnded = () => {
-              audio.removeEventListener('ended', onEnded)
-              audio.removeEventListener('error', onPlaybackError)
-              resolve()
-            }
-            
-            const onPlaybackError = (error: Event) => {
-              audio.removeEventListener('ended', onEnded)
-              audio.removeEventListener('error', onPlaybackError)
-              console.error(`Audio playback error for ${voiceList[i].name}:`, error)
-              resolve()
-            }
-            
-            audio.addEventListener('ended', onEnded)
-            audio.addEventListener('error', onPlaybackError)
+            return null // Return null to indicate failure
           })
+          
+          // Only wait for completion if play was successful
+          if (playResult !== null) {
+            await new Promise<void>((resolve) => {
+              const onEnded = () => {
+                audio.removeEventListener('ended', onEnded)
+                audio.removeEventListener('error', onPlaybackError)
+                resolve()
+              }
+              
+              const onPlaybackError = (error: Event) => {
+                audio.removeEventListener('ended', onEnded)
+                audio.removeEventListener('error', onPlaybackError)
+                console.error(`Audio playback error for ${voiceList[i].name}:`, error)
+                resolve()
+              }
+              
+              audio.addEventListener('ended', onEnded)
+              audio.addEventListener('error', onPlaybackError)
+            })
+          }
         } catch (error) {
           console.error(`Failed to play voice ${voiceList[i].name}:`, error)
           // Continue to next voice even if this one fails
@@ -304,13 +305,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               id="preset-text"
               type="text"
               value={customPresetText}
-              onChange={(e) => {
-                const newValue = e.target.value
-                // Only update if not empty, or if user is typing (allow temporarily empty while editing)
-                if (newValue.trim() || newValue === '') {
-                  setCustomPresetText(newValue)
-                }
-              }}
+              onChange={(e) => setCustomPresetText(e.target.value)}
               onBlur={(e) => {
                 // Reset to default if empty when losing focus
                 if (!e.target.value.trim()) {
