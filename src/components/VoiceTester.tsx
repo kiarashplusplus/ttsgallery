@@ -156,15 +156,19 @@ export function VoiceTester({ config }: VoiceTesterProps) {
         
         try {
           await new Promise<void>((resolveLoad, rejectLoad) => {
+            let timeoutId: NodeJS.Timeout
+            
             const onCanPlay = () => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
+              clearTimeout(timeoutId)
               resolveLoad()
             }
             
             const onError = () => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
+              clearTimeout(timeoutId)
               rejectLoad(new Error('Failed to load audio'))
             }
             
@@ -174,7 +178,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             audio.load()
             
             // Add timeout to prevent indefinite hanging
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
               rejectLoad(new Error('Audio load timeout'))
@@ -190,11 +194,14 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           await new Promise<void>((resolve) => {
             const onEnded = () => {
               audio.removeEventListener('ended', onEnded)
+              audio.removeEventListener('error', onError)
               resolve()
             }
             
-            const onError = () => {
+            const onError = (error: Event) => {
+              audio.removeEventListener('ended', onEnded)
               audio.removeEventListener('error', onError)
+              console.error(`Audio playback error for ${voiceList[i].name}:`, error)
               resolve()
             }
             
