@@ -48,13 +48,17 @@ export class AzureTTSService {
           }
         } catch {
           if (errorText) {
-            // Truncate at word boundary and add ellipsis
-            const truncated = errorText.substring(0, MAX_ERROR_TEXT_LENGTH)
-            const lastSpace = truncated.lastIndexOf(' ')
-            const finalText = lastSpace > 0 && errorText.length > MAX_ERROR_TEXT_LENGTH
-              ? truncated.substring(0, lastSpace) + '...'
-              : truncated
-            errorMessage = `${errorMessage}: ${finalText}`
+            // Truncate at word boundary and add ellipsis if text is too long
+            if (errorText.length > MAX_ERROR_TEXT_LENGTH) {
+              const truncated = errorText.substring(0, MAX_ERROR_TEXT_LENGTH)
+              const lastSpace = truncated.lastIndexOf(' ')
+              const finalText = lastSpace > 0
+                ? truncated.substring(0, lastSpace) + '...'
+                : truncated + '...'
+              errorMessage = `${errorMessage}: ${finalText}`
+            } else {
+              errorMessage = `${errorMessage}: ${errorText}`
+            }
           }
         }
 
