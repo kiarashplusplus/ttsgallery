@@ -118,7 +118,7 @@ function App() {
                 >
                   #openAI
                 </a>
-                {' '}voice like Jade Hardy or Megan Wherherall
+                {' '}voice like Jade Hardy or Megan Wetherall
               </p>
               <a 
                 target="_blank" 

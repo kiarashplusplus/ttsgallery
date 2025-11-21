@@ -104,7 +104,7 @@ Created by [Kiarash Adl](https://github.com/kiarashplusplus)
         >
           #openAI
         </a>
-        voice like Jade Hardy or Megan Wherherall
+        voice like Jade Hardy or Megan Wetherall
       </p>
       <a 
         target="_blank" 
