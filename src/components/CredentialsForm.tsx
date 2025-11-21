@@ -15,7 +15,11 @@ interface CredentialsFormProps {
 }
 
 export function CredentialsForm({ config, onConfigChange, onCancel }: CredentialsFormProps) {
-  const [formData, setFormData] = useState<Partial<AzureConfig>>(config)
+  const [formData, setFormData] = useState<Partial<AzureConfig>>({
+    deployment: 'gpt-4o-mini-tts',
+    apiVersion: '2025-03-01-preview',
+    ...config,
+  })
   const [errors, setErrors] = useState<string[]>([])
   const [showSuccess, setShowSuccess] = useState(false)
 
