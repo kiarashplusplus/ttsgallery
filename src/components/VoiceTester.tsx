@@ -148,15 +148,27 @@ export function VoiceTester({ config }: VoiceTesterProps) {
       const audioUrl = audioMap.get(voiceList[i].id)
       if (!audioUrl) continue
 
-      setAudioUrl(audioUrl)
-      
       if (audioRef.current) {
-        audioRef.current.src = audioUrl
-        await audioRef.current.play()
+        const audio = audioRef.current
+        
+        // Set src and wait for it to load before playing
+        audio.src = audioUrl
+        await new Promise<void>((resolveLoad) => {
+          const onCanPlay = () => {
+            audio.removeEventListener('canplay', onCanPlay)
+            resolveLoad()
+          }
+          audio.addEventListener('canplay', onCanPlay)
+          audio.load()
+        })
+        
+        // Update state after loading to avoid race condition
+        setAudioUrl(audioUrl)
+        
+        // Play and wait for completion
+        await audio.play()
         
         await new Promise<void>((resolve) => {
-          const audio = audioRef.current!
-          
           const onEnded = () => {
             audio.removeEventListener('ended', onEnded)
             resolve()
