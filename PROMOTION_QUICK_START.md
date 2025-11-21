@@ -198,7 +198,7 @@ Length: 2000-3000 words
 - GitHub stars: https://github.com/kiarashplusplus/ttsgallery/stargazers
 - Website traffic: Google Analytics
 - Social mentions: Twitter/LinkedIn analytics
-- Referrers: Cloudflare Analytics
+- Referral sources: Cloudflare Analytics
 
 ---
 
