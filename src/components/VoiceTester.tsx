@@ -37,6 +37,8 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const cancelPlaybackRef = useRef(false)
 
   const topVoices = useMemo(() => defaultVoices.filter(v => v.isTop), [])
+  const voicesToPlay = useMemo(() => playMode === 'all' ? defaultVoices : topVoices, [playMode, topVoices])
+  const voiceCount = voicesToPlay.length
 
   useEffect(() => {
     ttsService.current.updateConfig(config)
@@ -93,9 +95,10 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     }
 
     cancelPlaybackRef.current = false
-    const voicesToPlay = playMode === 'all' 
-      ? defaultVoices 
-      : topVoices
+    
+    // Phase constants for progress calculation
+    const TOTAL_PHASES = 2  // Generation + Playback
+    const voiceList = voicesToPlay
 
     // Phase 1: Batch generate all audio files
     setIsGeneratingBatch(true)
@@ -103,21 +106,21 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     setPlayAllProgress(0)
     const audioMap = new Map<string, string>()
 
-    for (let i = 0; i < voicesToPlay.length; i++) {
+    for (let i = 0; i < voiceList.length; i++) {
       if (cancelPlaybackRef.current) break
       
-      setGeneratingVoiceId(voicesToPlay[i].id)
-      setPlayAllProgress((i / (voicesToPlay.length * 2)) * 100)
+      setGeneratingVoiceId(voiceList[i].id)
+      setPlayAllProgress((i / (voiceList.length * TOTAL_PHASES)) * 100)
       
       const result = await ttsService.current.generateSpeech({
-        voice: voicesToPlay[i].id,
+        voice: voiceList[i].id,
         text: playAllPresetText,
       })
 
       if (result.error) {
-        toast.error(`Failed to generate ${voicesToPlay[i].name}: ${result.error}`)
+        toast.error(`Failed to generate ${voiceList[i].name}: ${result.error}`)
       } else {
-        audioMap.set(voicesToPlay[i].id, result.audioUrl)
+        audioMap.set(voiceList[i].id, result.audioUrl)
       }
     }
 
@@ -126,13 +129,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     setGeneratingVoiceId('')
 
     // Phase 2: Play all generated audio files sequentially
-    for (let i = 0; i < voicesToPlay.length; i++) {
+    for (let i = 0; i < voiceList.length; i++) {
       if (cancelPlaybackRef.current) break
       
-      setCurrentPlayingVoiceId(voicesToPlay[i].id)
-      setPlayAllProgress(((voicesToPlay.length + i) / (voicesToPlay.length * 2)) * 100)
+      setCurrentPlayingVoiceId(voiceList[i].id)
+      setPlayAllProgress(((voiceList.length + i) / (voiceList.length * TOTAL_PHASES)) * 100)
       
-      const audioUrl = audioMap.get(voicesToPlay[i].id)
+      const audioUrl = audioMap.get(voiceList[i].id)
       if (!audioUrl) continue
 
       setAudioUrl(audioUrl)
@@ -203,7 +206,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             <div className="flex-1">
               <Label className="text-sm font-medium mb-1 block">Batch Voice Comparison</Label>
               <p className="text-xs text-muted-foreground">
-                Play {playMode === 'all' ? 'all 23 voices' : 'top 9 voices'} sequentially with preset text: "{playAllPresetText}"
+                Play {playMode === 'all' ? `all ${defaultVoices.length}` : `top ${topVoices.length}`} voices sequentially with preset text: "{playAllPresetText}"
               </p>
             </div>
             <ToggleGroup 
@@ -231,7 +234,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                       Generating: {defaultVoices.find(v => v.id === generatingVoiceId)?.name}
                     </span>
                     <span className="text-muted-foreground">
-                      {(playMode === 'all' ? defaultVoices : topVoices).findIndex(v => v.id === generatingVoiceId) + 1} / {playMode === 'all' ? defaultVoices.length : topVoices.length}
+                      {voicesToPlay.findIndex(v => v.id === generatingVoiceId) + 1} / {voiceCount}
                     </span>
                   </>
                 ) : (
@@ -241,7 +244,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                       Playing: {defaultVoices.find(v => v.id === currentPlayingVoiceId)?.name}
                     </span>
                     <span className="text-muted-foreground">
-                      {(playMode === 'all' ? defaultVoices : topVoices).findIndex(v => v.id === currentPlayingVoiceId) + 1} / {playMode === 'all' ? defaultVoices.length : topVoices.length}
+                      {voicesToPlay.findIndex(v => v.id === currentPlayingVoiceId) + 1} / {voiceCount}
                     </span>
                   </>
                 )}
