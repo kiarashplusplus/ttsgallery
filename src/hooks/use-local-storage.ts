@@ -38,15 +38,16 @@ export function useLocalStorage<T>(
       
       try {
         // Allow value to be a function so we have same API as useState
-        const valueToStore = typeof value === 'function' ? (value as (prev: T) => T)(storedValue) : value
-        
-        setStoredValue(valueToStore)
-        window.localStorage.setItem(key, JSON.stringify(valueToStore))
+        setStoredValue((prev) => {
+          const valueToStore = typeof value === 'function' ? (value as (prev: T) => T)(prev) : value
+          window.localStorage.setItem(key, JSON.stringify(valueToStore))
+          return valueToStore
+        })
       } catch (error) {
         console.warn(`Error setting localStorage key "${key}":`, error)
       }
     },
-    [key, storedValue]
+    [key]
   )
 
   // Listen for changes in other tabs/windows
