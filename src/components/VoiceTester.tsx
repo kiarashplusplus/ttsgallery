@@ -228,7 +228,8 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     setCurrentPlayingVoiceId('')
     setPlayAllProgress(100)
     if (!cancelPlaybackRef.current) {
-      toast.success(`Completed playing ${playMode === 'all' ? 'all' : 'top'} voices!`)
+      const modeText = playMode === 'all' ? 'all' : playMode === 'hd' ? 'HD' : 'top'
+      toast.success(`Completed playing ${modeText} voices!`)
     }
   }
 
