@@ -96,7 +96,7 @@ export function CredentialsForm({ config, onConfigChange, onCancel }: Credential
             <Input
               id="apiVersion"
               type="text"
-              placeholder="2024-02-15-preview"
+              placeholder="2025-03-01-preview"
               value={formData.apiVersion || ''}
               onChange={handleChange('apiVersion')}
               className="font-mono text-sm"

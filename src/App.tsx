@@ -97,18 +97,33 @@ function App() {
               <div className="space-y-1 text-xs font-mono">
                 <div><span className="text-muted-foreground">Endpoint:</span> https://your-resource.openai.azure.com</div>
                 <div><span className="text-muted-foreground">Deployment:</span> gpt-4o-mini-tts</div>
-                <div><span className="text-muted-foreground">API Version:</span> 2024-02-15-preview</div>
+                <div><span className="text-muted-foreground">API Version:</span> 2025-03-01-preview</div>
               </div>
             </div>
           </TabsContent>
         </Tabs>
 
         <footer className="mt-12 text-center text-sm text-muted-foreground border-t border-border pt-6">
-          <p>
-            Built with Azure OpenAI • Supports 23 TTS voices including alloy, echo, nova, shimmer, and more
+          <p className="mb-3">
+            Built with Azure OpenAI • Supports all TTS voices including:
+          </p>
+          <p className="text-xs leading-relaxed max-w-3xl mx-auto mb-3">
+            Alloy (standard), Ash (neural), Ballad (neural), Brook (neural), Cedar (neural), 
+            Clover (neural), Coral (neural), Dan (neural), Echo (standard), Elan (neural), 
+            Fable (standard), Jade Hardy (hd), Jazz (neural), Marin (neural), Marilyn (neural), 
+            Meadow (neural), Megan Wetherall (hd), Nova (standard), Onyx (standard), Rio (neural), 
+            Sage (neural), Shimmer (standard), Verse (neural)
           </p>
           <p className="mt-2">
-            Open source • Privacy-focused • No data collection
+            <a 
+              href="https://github.com/github/spark-template" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              MIT License
+            </a>
+            {' '}• Privacy-focused • No data collection
           </p>
         </footer>
       </div>
