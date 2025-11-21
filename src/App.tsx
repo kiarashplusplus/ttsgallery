@@ -24,6 +24,21 @@ function App() {
     }
   }, [config, activeTab])
 
+  useEffect(() => {
+    // Load TikTok embed script
+    const script = document.createElement('script')
+    script.src = 'https://www.tiktok.com/embed.js'
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      // Cleanup script on unmount
+      if (document.body.contains(script)) {
+        document.body.removeChild(script)
+      }
+    }
+  }, [])
+
   const handleConfigChange = (newConfig: AzureConfig) => {
     setConfig(newConfig)
     setActiveTab('test')
@@ -51,6 +66,36 @@ function App() {
             tts.gallery
           </a>
         </header>
+
+        {/* TikTok Demo Video */}
+        <div className="mb-8 flex justify-center">
+          <blockquote 
+            className="tiktok-embed" 
+            cite="https://www.tiktok.com/@tts.gallery/video/7575220076723358998" 
+            data-video-id="7575220076723358998" 
+            style={{ maxWidth: '605px', minWidth: '325px' }}
+          >
+            <section>
+              <a 
+                target="_blank" 
+                title="@tts.gallery" 
+                href="https://www.tiktok.com/@tts.gallery?refer=embed"
+                rel="noopener noreferrer"
+              >
+                @tts.gallery
+              </a>
+              <p></p>
+              <a 
+                target="_blank" 
+                title="♬ original sound - tts.gallery" 
+                href="https://www.tiktok.com/music/original-sound-7575220077163375382?refer=embed"
+                rel="noopener noreferrer"
+              >
+                ♬ original sound - tts.gallery
+              </a>
+            </section>
+          </blockquote>
+        </div>
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'test' | 'settings')} className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
@@ -136,15 +181,6 @@ function App() {
               className="text-primary hover:underline font-medium"
             >
               Open Source on GitHub
-            </a>
-            <span>•</span>
-            <a 
-              href="https://www.tiktok.com/@tts.gallery/video/7575220076723358998" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary hover:underline font-medium"
-            >
-              Watch Demo Video
             </a>
             <span>•</span>
             <a 
