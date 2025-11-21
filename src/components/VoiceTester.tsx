@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
@@ -38,6 +39,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const [customPresetText, setCustomPresetText] = useState(playAllPresetText)
   
   const audioRef = useRef<HTMLAudioElement>(null)
+  const visibleAudioRef = useRef<HTMLAudioElement>(null)
   const ttsService = useRef(new AzureTTSService(config))
   const cancelPlaybackRef = useRef(false)
 
@@ -83,8 +85,8 @@ export function VoiceTester({ config }: VoiceTesterProps) {
       toast.success(`Generated speech for ${defaultVoices.find(v => v.id === voiceId)?.name}`)
       
       setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.play()
+        if (visibleAudioRef.current) {
+          visibleAudioRef.current.play()
         }
       }, 100)
     }
@@ -291,14 +293,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="preset-text" className="text-xs">Preset Text for Batch Comparison</Label>
-            <input
+            <Input
               id="preset-text"
               type="text"
               value={customPresetText}
               onChange={(e) => setCustomPresetText(e.target.value)}
               placeholder="Enter preset text..."
               disabled={isPlayingAll || isGeneratingBatch}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
 
@@ -430,6 +431,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           <div className="flex flex-col gap-2 p-4 bg-muted/50 rounded-lg">
             <Label className="text-sm font-medium">Audio Player</Label>
             <audio
+              ref={visibleAudioRef}
               src={audioUrl}
               controls
               className="w-full"
