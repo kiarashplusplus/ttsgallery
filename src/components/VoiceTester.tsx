@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -25,15 +25,18 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const [audioUrl, setAudioUrl] = useState<string>('')
   const [error, setError] = useState<string>('')
   const [isPlayingAll, setIsPlayingAll] = useState(false)
-  const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number>(-1)
+  const [currentPlayingVoiceId, setCurrentPlayingVoiceId] = useState<string>('')
+  const [generatingVoiceId, setGeneratingVoiceId] = useState<string>('')
   const [playAllProgress, setPlayAllProgress] = useState(0)
   const [playMode, setPlayMode] = useState<'all' | 'top'>('all')
   const [isGeneratingBatch, setIsGeneratingBatch] = useState(false)
-  const [generatingVoiceIndex, setGeneratingVoiceIndex] = useState<number>(-1)
   const [generatedAudios, setGeneratedAudios] = useState<Map<string, string>>(new Map())
   
   const audioRef = useRef<HTMLAudioElement>(null)
   const ttsService = useRef(new AzureTTSService(config))
+  const cancelPlaybackRef = useRef(false)
+
+  const topVoices = useMemo(() => defaultVoices.filter(v => v.isTop), [])
 
   useEffect(() => {
     ttsService.current.updateConfig(config)
@@ -77,20 +80,22 @@ export function VoiceTester({ config }: VoiceTesterProps) {
 
   const handlePlayAll = async () => {
     if (isPlayingAll) {
+      cancelPlaybackRef.current = true
       setIsPlayingAll(false)
-      setCurrentPlayingIndex(-1)
+      setCurrentPlayingVoiceId('')
+      setGeneratingVoiceId('')
       setPlayAllProgress(0)
       setIsGeneratingBatch(false)
-      setGeneratingVoiceIndex(-1)
       if (audioRef.current) {
         audioRef.current.pause()
       }
       return
     }
 
+    cancelPlaybackRef.current = false
     const voicesToPlay = playMode === 'all' 
       ? defaultVoices 
-      : defaultVoices.filter(v => v.isTop)
+      : topVoices
 
     // Phase 1: Batch generate all audio files
     setIsGeneratingBatch(true)
@@ -99,7 +104,9 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     const audioMap = new Map<string, string>()
 
     for (let i = 0; i < voicesToPlay.length; i++) {
-      setGeneratingVoiceIndex(i)
+      if (cancelPlaybackRef.current) break
+      
+      setGeneratingVoiceId(voicesToPlay[i].id)
       setPlayAllProgress((i / (voicesToPlay.length * 2)) * 100)
       
       const result = await ttsService.current.generateSpeech({
@@ -116,13 +123,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
 
     setGeneratedAudios(audioMap)
     setIsGeneratingBatch(false)
-    setGeneratingVoiceIndex(-1)
+    setGeneratingVoiceId('')
 
     // Phase 2: Play all generated audio files sequentially
     for (let i = 0; i < voicesToPlay.length; i++) {
-      if (!isPlayingAll && i > 0) break
+      if (cancelPlaybackRef.current) break
       
-      setCurrentPlayingIndex(i)
+      setCurrentPlayingVoiceId(voicesToPlay[i].id)
       setPlayAllProgress(((voicesToPlay.length + i) / (voicesToPlay.length * 2)) * 100)
       
       const audioUrl = audioMap.get(voicesToPlay[i].id)
@@ -160,9 +167,11 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     setGeneratedAudios(new Map())
     
     setIsPlayingAll(false)
-    setCurrentPlayingIndex(-1)
+    setCurrentPlayingVoiceId('')
     setPlayAllProgress(100)
-    toast.success(`Completed playing ${playMode === 'all' ? 'all' : 'top'} voices!`)
+    if (!cancelPlaybackRef.current) {
+      toast.success(`Completed playing ${playMode === 'all' ? 'all' : 'top'} voices!`)
+    }
   }
 
   const getVoiceTypeColor = (type: Voice['type']) => {
@@ -219,20 +228,20 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                   <>
                     <span className="text-muted-foreground flex items-center gap-2">
                       <div className="animate-spin h-3 w-3 border-2 border-accent border-t-transparent rounded-full" />
-                      Generating: {(playMode === 'all' ? defaultVoices : defaultVoices.filter(v => v.isTop))[generatingVoiceIndex]?.name}
+                      Generating: {defaultVoices.find(v => v.id === generatingVoiceId)?.name}
                     </span>
                     <span className="text-muted-foreground">
-                      {generatingVoiceIndex + 1} / {playMode === 'all' ? defaultVoices.length : defaultVoices.filter(v => v.isTop).length}
+                      {(playMode === 'all' ? defaultVoices : topVoices).findIndex(v => v.id === generatingVoiceId) + 1} / {playMode === 'all' ? defaultVoices.length : topVoices.length}
                     </span>
                   </>
                 ) : (
                   <>
                     <span className="text-muted-foreground flex items-center gap-2">
                       <Play className="animate-pulse" size={14} />
-                      Playing: {(playMode === 'all' ? defaultVoices : defaultVoices.filter(v => v.isTop))[currentPlayingIndex]?.name}
+                      Playing: {defaultVoices.find(v => v.id === currentPlayingVoiceId)?.name}
                     </span>
                     <span className="text-muted-foreground">
-                      {currentPlayingIndex + 1} / {playMode === 'all' ? defaultVoices.length : defaultVoices.filter(v => v.isTop).length}
+                      {(playMode === 'all' ? defaultVoices : topVoices).findIndex(v => v.id === currentPlayingVoiceId) + 1} / {playMode === 'all' ? defaultVoices.length : topVoices.length}
                     </span>
                   </>
                 )}
@@ -272,7 +281,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                 <SelectItem 
                   key={voice.id} 
                   value={voice.id}
-                  className={currentPlayingIndex >= 0 && defaultVoices[currentPlayingIndex].id === voice.id ? 'bg-accent/20' : ''}
+                  className={currentPlayingVoiceId === voice.id ? 'bg-accent/20' : ''}
                 >
                   <div className="flex items-center gap-2">
                     <span>{voice.name}</span>
@@ -349,9 +358,9 @@ export function VoiceTester({ config }: VoiceTesterProps) {
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-4 bg-muted/30 rounded-lg max-h-48 overflow-y-auto">
-          {defaultVoices.map((voice, index) => {
-            const isGenerating = isGeneratingBatch && generatingVoiceIndex === index
-            const isPlaying = !isGeneratingBatch && currentPlayingIndex === index && isPlayingAll
+          {defaultVoices.map((voice) => {
+            const isGeneratingVoice = isGeneratingBatch && generatingVoiceId === voice.id
+            const isPlayingVoice = !isGeneratingBatch && currentPlayingVoiceId === voice.id && isPlayingAll
             
             return (
               <button
@@ -360,16 +369,16 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                 className={`
                   text-xs p-2 rounded border transition-all text-left
                   ${selectedVoice === voice.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50'}
-                  ${isGenerating ? 'ring-2 ring-orange-500 animate-pulse' : ''}
-                  ${isPlaying ? 'ring-2 ring-accent animate-pulse' : ''}
+                  ${isGeneratingVoice ? 'ring-2 ring-orange-500 animate-pulse' : ''}
+                  ${isPlayingVoice ? 'ring-2 ring-accent animate-pulse' : ''}
                 `}
               >
                 <div className="font-medium flex items-center gap-1">
                   {voice.name}
-                  {isGenerating && (
+                  {isGeneratingVoice && (
                     <div className="animate-spin h-3 w-3 border-2 border-orange-500 border-t-transparent rounded-full" />
                   )}
-                  {isPlaying && (
+                  {isPlayingVoice && (
                     <Play className="animate-pulse" size={12} />
                   )}
                 </div>
