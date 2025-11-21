@@ -81,7 +81,7 @@ export class AzureTTSService {
         errorMessage = error.message
         // Add more context for common network errors
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
-          errorMessage = `Network error: Unable to connect to Azure API. ${error.message}`
+          errorMessage = 'Network error: Unable to connect to Azure API'
         } else if (error.name === 'AbortError') {
           errorMessage = 'Request was aborted or timed out'
         }

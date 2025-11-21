@@ -21,10 +21,10 @@ const AUDIO_LOAD_TIMEOUT = 10000 // 10 seconds
 
 // MediaError codes mapping for user-friendly error messages
 const MEDIA_ERROR_MESSAGES: Record<number, string> = {
-  1: 'MEDIA_ERR_ABORTED - The user aborted the media playback',
-  2: 'MEDIA_ERR_NETWORK - A network error occurred while loading the media',
-  3: 'MEDIA_ERR_DECODE - The media is corrupted or not supported by your browser',
-  4: 'MEDIA_ERR_SRC_NOT_SUPPORTED - The media format is not supported',
+  1: 'Playback was aborted',
+  2: 'Network error occurred while loading the audio',
+  3: 'Audio file is corrupted or not supported by your browser',
+  4: 'Audio format is not supported',
 }
 
 // Helper function to extract error details from HTMLAudioElement
