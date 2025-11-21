@@ -2,11 +2,6 @@ name = "tts-gallery"
 compatibility_date = "2025-01-15"
 pages_build_output_dir = "dist"
 
-[build]
-command = "npm run build"
-cwd = ""
-watch_dir = "src"
-
 [[pages.headers]]
 path = "/*"
 headers = [
