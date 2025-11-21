@@ -181,11 +181,15 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               resolveLoad()
             }
             
-            const onError = () => {
+            const onError = (event: Event) => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
               clearTimeout(timeoutId)
-              rejectLoad(new Error('Failed to load audio'))
+              const target = event.target as HTMLAudioElement
+              const errorDetails = target.error 
+                ? `${target.error.code}: ${target.error.message}` 
+                : 'Unknown audio error'
+              rejectLoad(new Error(`Failed to load audio for ${voiceList[i].name}: ${errorDetails}`))
             }
             
             // Add listeners before calling load to avoid race condition
@@ -197,7 +201,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             timeoutId = setTimeout(() => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
-              rejectLoad(new Error('Audio load timeout'))
+              rejectLoad(new Error(`Audio load timeout for ${voiceList[i].name} after ${AUDIO_LOAD_TIMEOUT}ms`))
             }, AUDIO_LOAD_TIMEOUT)
           })
           
@@ -216,10 +220,15 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                 resolve()
               }
               
-              const onPlaybackError = (error: Event) => {
+              const onPlaybackError = (event: Event) => {
                 audio.removeEventListener('ended', onEnded)
                 audio.removeEventListener('error', onPlaybackError)
-                console.error(`Audio playback error for ${voiceList[i].name}:`, error)
+                const target = event.target as HTMLAudioElement
+                const errorDetails = target.error 
+                  ? `${target.error.code}: ${target.error.message}` 
+                  : 'Unknown playback error'
+                console.error(`Audio playback error for ${voiceList[i].name}:`, errorDetails)
+                toast.error(`Playback failed for ${voiceList[i].name}: ${errorDetails}`)
                 resolve()
               }
               
@@ -228,7 +237,9 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             })
           }
         } catch (error) {
-          console.error(`Failed to play voice ${voiceList[i].name}:`, error)
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+          console.error(`Failed to play voice ${voiceList[i].name}:`, errorMessage)
+          toast.error(`Failed to play ${voiceList[i].name}: ${errorMessage}`)
           // Continue to next voice even if this one fails
         }
       }
