@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Key, CheckCircle, Warning } from '@phosphor-icons/react'
+import { Key, CheckCircle, Warning, Info } from '@phosphor-icons/react'
 import type { AzureConfig } from '@/types/azure'
 import { validateAzureConfig } from '@/types/azure'
 
@@ -59,6 +59,13 @@ export function CredentialsForm({ config, onConfigChange, onCancel }: Credential
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <Alert className="border-primary/20 bg-primary/5">
+            <Info className="h-4 w-4 text-primary" />
+            <AlertDescription className="text-sm">
+              Your credentials are encrypted and stored locally in your browser. They are only sent to your Azure OpenAI endpoint - never to tts.gallery servers.
+            </AlertDescription>
+          </Alert>
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="endpoint">Endpoint URL</Label>
             <Input

@@ -1,6 +1,6 @@
 # Planning Guide
 
-A browser-based Azure OpenAI TTS Voice Sampler that allows users to securely input their Azure credentials and preview all available TTS voices with customizable text, featuring sequential playback and credential persistence.
+A browser-based Azure OpenAI TTS Voice Sampler (TTS Gallery - tts.gallery) that allows users to securely input their Azure credentials and preview all available TTS voices with customizable text, featuring sequential playback and credential persistence.
 
 **Experience Qualities**:
 1. **Professional** - Clean, corporate interface that inspires confidence when handling sensitive API credentials

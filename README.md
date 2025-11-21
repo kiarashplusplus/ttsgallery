@@ -1,19 +1,25 @@
-# Azure OpenAI TTS Voice Sampler
+# TTS Gallery
 
-A browser-based web application for previewing and comparing all available text-to-speech voices from Azure OpenAI's TTS service. Test individual voices or play through all 23 voices sequentially with your custom text.
+**[tts.gallery](https://tts.gallery)** - A browser-based web application for previewing and comparing all available text-to-speech voices from Azure OpenAI's TTS service. Test individual voices or play through all 23 voices sequentially with your custom text.
 
-![Azure OpenAI TTS Voice Sampler](https://via.placeholder.com/1200x600/0078D4/FFFFFF?text=Azure+OpenAI+TTS+Voice+Sampler)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61dafb)](https://react.dev/)
 
-## ✨ Features
+## 🌟 Features at a Glance
 
-- 🎤 **23 TTS Voices** - Preview all Azure OpenAI voices including alloy, echo, fable, nova, shimmer, and 18 more
-- 🔐 **Secure Credential Storage** - Your Azure API credentials are stored locally in encrypted browser storage
-- 🎯 **Individual Testing** - Select any voice and hear it speak your custom text
-- 🎵 **Sequential Playback** - "Play All Voices" mode lets you compare all voices with the same text
-- 📱 **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
-- 🎨 **Azure-Themed UI** - Professional interface inspired by Microsoft Azure's design language
-- 🚀 **Zero Backend** - Runs entirely in your browser, no server required
-- 🔒 **Privacy-First** - No data collection, credentials never leave your browser
+| Feature | Description |
+|---------|-------------|
+| 🎤 **23 Voices** | All Azure OpenAI TTS voices (Standard, Neural, HD) |
+| 🔐 **Secure** | Credentials encrypted and stored locally in browser |
+| 🎯 **Individual Testing** | Test any voice with custom text |
+| 🎵 **Sequential Playback** | Compare all voices with same text automatically |
+| 📱 **Responsive** | Works on desktop, tablet, and mobile |
+| 🎨 **Professional UI** | Azure-themed, clean interface |
+| 🚀 **No Backend** | 100% client-side, no server required |
+| 🔒 **Privacy-First** | Zero data collection or tracking |
+| ⚡ **Fast** | Instant voice switching and playback |
+| 🆓 **Free & Open** | MIT licensed, community-driven |
 
 ## 🎯 Supported Voices
 
@@ -46,6 +52,12 @@ A browser-based web application for previewing and comparing all available text-
 - **Jade Hardy** - Confident and strong
 - **Megan Wetherall** - Professional and polished
 
+## 🎯 Live Demo
+
+**Visit [tts.gallery](https://tts.gallery)** to use the application immediately!
+
+**New to TTS Gallery?** Check out the [Quick Start Guide](QUICKSTART.md) for a 5-minute tutorial.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -61,18 +73,18 @@ A browser-based web application for previewing and comparing all available text-
    - Endpoint URL (e.g., `https://your-resource.openai.azure.com`)
    - API Key (found in "Keys and Endpoint" section)
    - Deployment name (e.g., `gpt-4o-mini-tts`)
-   - API version (e.g., `2024-02-15-preview`)
+   - API version (e.g., `2025-03-01-preview`)
 
 ### Using the Application
 
-1. **Open the application** in your web browser
+1. **Visit [tts.gallery](https://tts.gallery)** or run locally
 2. **Navigate to Settings tab**
 3. **Enter your Azure OpenAI credentials**:
    ```
    Endpoint:    https://your-resource.openai.azure.com
    API Key:     your-api-key-here
    Deployment:  gpt-4o-mini-tts
-   API Version: 2024-02-15-preview
+   API Version: 2025-03-01-preview
    ```
 4. **Click "Save Configuration"**
 5. **Switch to Voice Testing tab**
@@ -100,20 +112,36 @@ A browser-based web application for previewing and comparing all available text-
 
 **Note**: Your browser must support CORS for Azure OpenAI endpoints. If you encounter CORS issues, you may need to configure your Azure OpenAI resource to allow browser-based requests.
 
+## 🚀 Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/tts-gallery.git
+cd tts-gallery
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
 ## 📖 API Configuration Examples
 
 ### Standard Configuration
 ```
 Endpoint:    https://myresource.openai.azure.com
 Deployment:  gpt-4o-mini-tts
-API Version: 2024-02-15-preview
+API Version: 2025-03-01-preview
 ```
 
 ### With Custom Deployment
 ```
 Endpoint:    https://mycompany-ai.openai.azure.com
 Deployment:  tts-production-v2
-API Version: 2024-02-15-preview
+API Version: 2025-03-01-preview
 ```
 
 ## 🎨 Customization
@@ -152,7 +180,17 @@ The application uses a professional Azure-themed color palette:
 
 ## 🤝 Contributing
 
-This is an open-source project. Contributions, issues, and feature requests are welcome!
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Quick contribution steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines and project structure.
 
 ## 📄 License
 
@@ -164,6 +202,19 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Powered by [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 - Icons from [Phosphor Icons](https://phosphoricons.com/)
 
+## 📦 Deployment
+
+Ready to deploy your own instance? See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions for:
+- Vercel (recommended)
+- Netlify
+- Cloudflare Pages
+- GitHub Pages
+- Custom domain setup for tts.gallery
+
+## 🌟 Star History
+
+If you find this project useful, please consider giving it a star on GitHub!
+
 ## 📧 Support
 
 For issues related to:
@@ -171,6 +222,17 @@ For issues related to:
 - **Azure OpenAI Service**: Contact [Azure Support](https://azure.microsoft.com/en-us/support/)
 - **API access**: Check [Azure OpenAI documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/)
 
+## 🔗 Links
+
+- **Live Application**: [tts.gallery](https://tts.gallery)
+- **GitHub Repository**: [github.com/yourusername/tts-gallery](https://github.com/yourusername/tts-gallery)
+- **Report Issues**: [GitHub Issues](https://github.com/yourusername/tts-gallery/issues)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+- **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
+
 ---
 
 **Note**: This application is not affiliated with or endorsed by Microsoft or Azure. It's a community-built tool for testing Azure OpenAI TTS voices.
+
+Made with ❤️ by the open-source community
