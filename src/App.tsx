@@ -78,6 +78,7 @@ function App() {
             className="tiktok-embed" 
             cite="https://www.tiktok.com/@tts.gallery/video/7575220076723358998" 
             data-video-id="7575220076723358998" 
+            data-embed-from="embed_page"
             style={{ maxWidth: '605px', minWidth: '325px' }}
           >
             <section>
@@ -89,12 +90,41 @@ function App() {
               >
                 @tts.gallery
               </a>
+              <p>
+                OpenAI voice sampler for{' '}
+                <a 
+                  title="developers" 
+                  target="_blank" 
+                  href="https://www.tiktok.com/tag/developers?refer=embed"
+                  rel="noopener noreferrer"
+                >
+                  #developers
+                </a>
+                {' '}to try before choosing an{' '}
+                <a 
+                  title="azure" 
+                  target="_blank" 
+                  href="https://www.tiktok.com/tag/azure?refer=embed"
+                  rel="noopener noreferrer"
+                >
+                  #azure
+                </a>
+                {' '}
+                <a 
+                  title="openai" 
+                  target="_blank" 
+                  href="https://www.tiktok.com/tag/openai?refer=embed"
+                  rel="noopener noreferrer"
+                >
+                  #openAI
+                </a>
+                {' '}voice like Jade Hardy or Megan Wherherall
+              </p>
               <a 
                 target="_blank" 
                 title="♬ original sound - tts.gallery" 
-                href="https://www.tiktok.com/music/original-sound-7575220077163375382?refer=embed"
+                href="https://www.tiktok.com/music/original-sound-7575220047904328470?refer=embed"
                 rel="noopener noreferrer"
-                className="mt-2 block"
               >
                 ♬ original sound - tts.gallery
               </a>
