@@ -1,5 +1,8 @@
 import type { AzureConfig, TTSRequest, TTSResponse } from '@/types/azure'
 
+// Constants
+const MAX_ERROR_TEXT_LENGTH = 200
+
 export class AzureTTSService {
   private config: AzureConfig
 
@@ -45,7 +48,7 @@ export class AzureTTSService {
           }
         } catch {
           if (errorText) {
-            errorMessage = `${errorMessage}: ${errorText.substring(0, 200)}`
+            errorMessage = `${errorMessage}: ${errorText.substring(0, MAX_ERROR_TEXT_LENGTH)}`
           }
         }
 

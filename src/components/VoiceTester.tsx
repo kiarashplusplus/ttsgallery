@@ -19,6 +19,14 @@ import { toast } from 'sonner'
 const TOTAL_PHASES = 2 // Generation + Playback
 const AUDIO_LOAD_TIMEOUT = 10000 // 10 seconds
 
+// Helper function to extract error details from HTMLAudioElement
+const getAudioErrorDetails = (audioElement: HTMLAudioElement): string => {
+  if (audioElement.error) {
+    return `${audioElement.error.code}: ${audioElement.error.message}`
+  }
+  return 'Unknown audio error'
+}
+
 interface VoiceTesterProps {
   config: AzureConfig
 }
@@ -186,9 +194,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               audio.removeEventListener('error', onError)
               clearTimeout(timeoutId)
               const target = event.target as HTMLAudioElement
-              const errorDetails = target.error 
-                ? `${target.error.code}: ${target.error.message}` 
-                : 'Unknown audio error'
+              const errorDetails = getAudioErrorDetails(target)
               rejectLoad(new Error(`Failed to load audio for ${voiceList[i].name}: ${errorDetails}`))
             }
             
@@ -224,9 +230,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                 audio.removeEventListener('ended', onEnded)
                 audio.removeEventListener('error', onPlaybackError)
                 const target = event.target as HTMLAudioElement
-                const errorDetails = target.error 
-                  ? `${target.error.code}: ${target.error.message}` 
-                  : 'Unknown playback error'
+                const errorDetails = getAudioErrorDetails(target)
                 console.error(`Audio playback error for ${voiceList[i].name}:`, errorDetails)
                 toast.error(`Playback failed for ${voiceList[i].name}: ${errorDetails}`)
                 resolve()
