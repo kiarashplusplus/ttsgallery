@@ -157,7 +157,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
         
         try {
           await new Promise<void>((resolveLoad, rejectLoad) => {
-            let timeoutId: NodeJS.Timeout
+            let timeoutId!: NodeJS.Timeout
             
             const onCanPlay = () => {
               audio.removeEventListener('canplay', onCanPlay)
@@ -199,7 +199,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               resolve()
             }
             
-            const onPlaybackError = (error: ErrorEvent) => {
+            const onPlaybackError = (error: Event) => {
               audio.removeEventListener('ended', onEnded)
               audio.removeEventListener('error', onPlaybackError)
               console.error(`Audio playback error for ${voiceList[i].name}:`, error)
