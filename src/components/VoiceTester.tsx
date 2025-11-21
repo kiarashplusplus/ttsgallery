@@ -14,6 +14,9 @@ import { AzureTTSService } from '@/lib/azure-tts'
 import type { AzureConfig } from '@/types/azure'
 import { toast } from 'sonner'
 
+// Constants
+const TOTAL_PHASES = 2 // Generation + Playback
+
 interface VoiceTesterProps {
   config: AzureConfig
 }
@@ -95,9 +98,6 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     }
 
     cancelPlaybackRef.current = false
-    
-    // Phase constants for progress calculation
-    const TOTAL_PHASES = 2  // Generation + Playback
     const voiceList = voicesToPlay
 
     // Phase 1: Batch generate all audio files
@@ -127,6 +127,16 @@ export function VoiceTester({ config }: VoiceTesterProps) {
     setGeneratedAudios(audioMap)
     setIsGeneratingBatch(false)
     setGeneratingVoiceId('')
+
+    // Check if cancelled during generation
+    if (cancelPlaybackRef.current) {
+      audioMap.forEach(url => URL.revokeObjectURL(url))
+      setGeneratedAudios(new Map())
+      setIsPlayingAll(false)
+      setCurrentPlayingVoiceId('')
+      setPlayAllProgress(0)
+      return
+    }
 
     // Phase 2: Play all generated audio files sequentially
     for (let i = 0; i < voiceList.length; i++) {
