@@ -123,10 +123,7 @@ We're particularly interested in contributions for:
 
 Please avoid PRs for:
 - Adding backend/server components (this is a client-only app)
-- Integrating non-Azure TTS services
 - Adding analytics or tracking
-- Significant UI redesigns without discussion
-- Dependencies on Node.js-only packages
 
 ## 📜 License
 
