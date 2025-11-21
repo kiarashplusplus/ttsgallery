@@ -51,6 +51,58 @@ A browser-based Azure OpenAI TTS Voice Sampler (TTS Gallery - tts.gallery) that 
 ## Design Direction
 The design should feel professional and corporate, evoking the Microsoft Azure aesthetic with blue accents and clean typography. A minimal interface serves the technical/developer audience best, with clear sectioning between credentials, controls, and playback areas.
 
+## SEO Strategy & Implementation
+
+### On-Page SEO
+- **Title Optimization**: Include primary keywords "Azure OpenAI TTS Voice Sampler" + "23 Voices" + "Free"
+- **Meta Descriptions**: Mention all key voices (Alloy, Echo, Nova, etc.) and gpt-4o-mini-tts
+- **Header Tags**: Proper H1/H2 hierarchy with keyword-rich headings
+- **Semantic HTML**: Use article, section, and header tags appropriately
+- **Alt Text**: Descriptive alt text for any images/icons
+- **Internal Linking**: Link between features and documentation
+
+### Structured Data (Schema.org)
+- **SoftwareApplication**: Define the app with features, price (free), and category
+- **WebApplication**: Mark as browser-based tool with requirements
+- **ItemList**: List all 23 voices with descriptions
+- **FAQPage**: Answer common questions about voices, pricing, and usage
+
+### Technical SEO
+- **Sitemap.xml**: Updated weekly with priority 1.0 for homepage
+- **Robots.txt**: Allow all crawlers including GPTBot for AI discoverability
+- **Canonical URLs**: Set to https://tts.gallery
+- **Open Graph**: Rich social sharing with images
+- **Twitter Cards**: Summary with large image preview
+- **Mobile Optimization**: Responsive design for mobile-first indexing
+- **Page Speed**: Vite optimization for fast loading
+- **HTTPS**: Secure connection required
+
+### Content Strategy
+- **Voice Names in Copy**: Mention all 23 voices by name in footer
+- **Keyword Density**: Natural inclusion of "Azure OpenAI TTS", "gpt-4o-mini-tts", "voice sampler"
+- **Long-tail Keywords**: "How to use Azure OpenAI TTS", "Compare Azure TTS voices", "Best OpenAI voice for narration"
+- **Developer Intent**: Target keywords developers search when evaluating TTS options
+
+### GitHub SEO
+- **README.md**: Comprehensive with all voice names and keywords
+- **Topics/Tags**: azure-openai, tts, text-to-speech, gpt-4o-mini-tts, voice-sampler
+- **Badges**: Display tech stack, license, and status
+- **Documentation**: Link to live demo and API reference
+
+### Link Building Opportunities
+- **Show HN**: Launch on Hacker News with developer focus
+- **Product Hunt**: Submit as free developer tool
+- **Reddit**: Post in r/programming, r/azure, r/OpenAI
+- **Dev.to**: Write tutorial "How to Test All Azure OpenAI Voices"
+- **Azure Docs**: Reference in community resources
+- **GitHub Awesome Lists**: Submit to awesome-tts, awesome-azure
+
+### Search Intent Targeting
+- **Informational**: "What voices does Azure OpenAI TTS have?"
+- **Comparison**: "Azure TTS voices comparison"
+- **Transactional**: "Azure OpenAI voice demo", "Test gpt-4o-mini-tts"
+- **Navigational**: "TTS Gallery", "tts.gallery"
+
 ## Color Selection
 Complementary (opposite colors) - Azure blue paired with warm orange accents to create professional contrast while maintaining energy and focus for interactive elements.
 

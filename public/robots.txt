@@ -1,4 +1,19 @@
 User-agent: *
 Allow: /
 
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 Sitemap: https://tts.gallery/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1

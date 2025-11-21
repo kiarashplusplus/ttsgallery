@@ -36,14 +36,17 @@ function App() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="mb-8 text-center">
           <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            TTS Gallery
+            TTS Gallery - Azure OpenAI Voice Sampler
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-lg mb-2">
             Preview and compare all 23 Azure OpenAI text-to-speech voices
+          </p>
+          <p className="text-sm text-muted-foreground mb-3">
+            Test gpt-4o-mini-tts voices: Alloy, Echo, Fable, Nova, Onyx, Shimmer + 15 Neural voices + 2 HD voices
           </p>
           <a 
             href="https://tts.gallery" 
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors mt-1 inline-block"
+            className="text-sm text-primary hover:text-accent transition-colors inline-block font-medium"
           >
             tts.gallery
           </a>
@@ -65,10 +68,10 @@ function App() {
               <>
                 <Alert className="border-primary/20 bg-primary/5">
                   <Info className="h-4 w-4 text-primary" />
-                  <AlertTitle className="text-primary">How to use</AlertTitle>
+                  <AlertTitle className="text-primary">How to Use Azure OpenAI TTS Voice Sampler</AlertTitle>
                   <AlertDescription>
-                    Select a voice from the dropdown, enter or edit the sample text, and click "Speak" to hear the voice. 
-                    Use "Play All Voices" to hear all voices sequentially with the same text.
+                    Select any of the 23 Azure OpenAI voices from the dropdown, enter or edit your sample text, and click "Speak" to preview the voice. 
+                    Use "Play All Voices" to compare all standard, neural, and HD voices sequentially with the same text.
                   </AlertDescription>
                 </Alert>
                 
@@ -77,7 +80,7 @@ function App() {
             ) : (
               <Alert variant="destructive">
                 <AlertDescription>
-                  Please configure your Azure OpenAI credentials in the Settings tab before testing voices.
+                  Please configure your Azure OpenAI credentials (endpoint, API key, and gpt-4o-mini-tts deployment) in the Settings tab before testing voices.
                 </AlertDescription>
               </Alert>
             )}
@@ -110,34 +113,52 @@ function App() {
         </Tabs>
 
         <footer className="mt-12 text-center text-sm text-muted-foreground border-t border-border pt-6">
-          <p className="mb-3 font-medium text-foreground">
-            All 23 Azure OpenAI TTS Voices
-          </p>
+          <h2 className="mb-3 font-semibold text-foreground text-base">
+            Complete Azure OpenAI TTS Voice Library - All 23 Voices
+          </h2>
           <p className="text-xs leading-relaxed max-w-3xl mx-auto mb-4">
-            <strong>Standard:</strong> Alloy, Echo, Fable, Nova, Onyx, Shimmer
+            <strong>Standard Voices (6):</strong> Alloy (neutral, balanced), Echo (resonant, clear), Fable (expressive, warm), Nova (bright, energetic), Onyx (deep, authoritative), Shimmer (bright, cheerful)
             {' • '}
-            <strong>Neural:</strong> Ash, Ballad, Brook, Cedar, Clover, Coral, Dan, Elan, Jazz, Marin, Marilyn, Meadow, Rio, Sage, Verse
+            <strong>Neural Voices (15):</strong> Ash, Ballad, Brook, Cedar, Clover, Coral, Dan, Elan, Jazz, Marin, Marilyn, Meadow, Rio, Sage, Verse
             {' • '}
-            <strong>HD:</strong> Jade Hardy, Megan Wetherall
+            <strong>HD Voices (2):</strong> Jade Hardy (confident, strong), Megan Wetherall (professional, polished)
           </p>
-          <div className="flex items-center justify-center gap-3 text-xs">
+          <p className="text-xs mb-4 max-w-2xl mx-auto leading-relaxed">
+            Free and open-source Azure OpenAI text-to-speech voice preview tool. 
+            Test gpt-4o-mini-tts API with custom text for narration, customer support, tutorials, and more. 
+            Compare voice quality across standard, neural, and HD models.
+          </p>
+          <div className="flex items-center justify-center gap-3 text-xs flex-wrap">
             <a 
-              href="https://github.com" 
+              href="https://github.com/tts-gallery/tts-gallery" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-primary hover:underline font-medium"
             >
-              Open Source
+              Open Source on GitHub
             </a>
             <span>•</span>
-            <span>MIT License</span>
+            <a 
+              href="https://opensource.org/licenses/MIT" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors"
+            >
+              MIT License
+            </a>
             <span>•</span>
             <span>Privacy-Focused</span>
             <span>•</span>
             <span>No Data Collection</span>
+            <span>•</span>
+            <span>Local Credential Storage</span>
           </div>
-          <p className="mt-3 text-xs">
-            Not affiliated with Microsoft or Azure • Built for the developer community
+          <p className="mt-4 text-xs">
+            Not affiliated with Microsoft or Azure • Built for developers and the AI community
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground/70">
+            Keywords: Azure OpenAI TTS, gpt-4o-mini-tts demo, OpenAI voices comparison, text-to-speech preview, 
+            TTS voice sampler, Azure speech synthesis, neural TTS voices, HD voice quality
           </p>
         </footer>
       </div>

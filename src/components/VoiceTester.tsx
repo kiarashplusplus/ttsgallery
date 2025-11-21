@@ -170,6 +170,11 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           <p className="text-sm text-muted-foreground">
             {defaultVoices.find(v => v.id === selectedVoice)?.description}
           </p>
+          {defaultVoices.find(v => v.id === selectedVoice)?.useCases && (
+            <p className="text-xs text-muted-foreground/80 italic">
+              Best for: {defaultVoices.find(v => v.id === selectedVoice)?.useCases}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">

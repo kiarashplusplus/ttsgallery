@@ -1,10 +1,14 @@
-# TTS Gallery
+# TTS Gallery - Azure OpenAI TTS Voice Sampler
 
-**[tts.gallery](https://tts.gallery)** - A browser-based web application for previewing and comparing all available text-to-speech voices from Azure OpenAI's TTS service. Test individual voices or play through all 23 voices sequentially with your custom text.
+**[tts.gallery](https://tts.gallery)** - Free, open-source Azure OpenAI TTS voice preview tool. Compare all 23 text-to-speech voices (gpt-4o-mini-tts) including Alloy, Echo, Nova, Fable, Onyx, Shimmer, and 15 neural voices + 2 HD voices. Test individual voices or play through all voices sequentially with custom text.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61dafb)](https://react.dev/)
+[![Azure OpenAI](https://img.shields.io/badge/Azure-OpenAI%20TTS-0078D4)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+> 🎙️ **The complete Azure OpenAI TTS voice library at your fingertips**
 
 ## 🌟 Features at a Glance
 
@@ -236,3 +240,7 @@ For issues related to:
 **Note**: This application is not affiliated with or endorsed by Microsoft or Azure. It's a community-built tool for testing Azure OpenAI TTS voices.
 
 Made with ❤️ by the open-source community
+
+## 🏷️ Topics
+
+`azure-openai` `tts` `text-to-speech` `voice-sampler` `gpt-4o-mini-tts` `openai-voices` `azure-tts` `speech-synthesis` `voice-preview` `react` `typescript` `open-source` `developer-tools` `audio` `ai-voices` `neural-voices` `hd-voices` `voice-comparison` `demo-app`
