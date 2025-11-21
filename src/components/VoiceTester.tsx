@@ -16,6 +16,7 @@ import { toast } from 'sonner'
 
 // Constants
 const TOTAL_PHASES = 2 // Generation + Playback
+const AUDIO_LOAD_TIMEOUT = 10000 // 10 seconds
 
 interface VoiceTesterProps {
   config: AzureConfig
@@ -182,7 +183,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
               rejectLoad(new Error('Audio load timeout'))
-            }, 10000) // 10 second timeout
+            }, AUDIO_LOAD_TIMEOUT)
           })
           
           // Update state after loading to avoid race condition
@@ -198,7 +199,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               resolve()
             }
             
-            const onPlaybackError = (error: Event) => {
+            const onPlaybackError = (error: ErrorEvent) => {
               audio.removeEventListener('ended', onEnded)
               audio.removeEventListener('error', onPlaybackError)
               console.error(`Audio playback error for ${voiceList[i].name}:`, error)
