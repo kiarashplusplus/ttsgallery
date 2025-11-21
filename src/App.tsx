@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useKV } from '@github/spark/hooks'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -9,9 +8,10 @@ import { VoiceTester } from '@/components/VoiceTester'
 import { Toaster } from '@/components/ui/sonner'
 import type { AzureConfig } from '@/types/azure'
 import { validateAzureConfig } from '@/types/azure'
+import { useLocalStorage } from '@/hooks/use-local-storage'
 
 function App() {
-  const [config, setConfig] = useKV<Partial<AzureConfig>>('azure-config', {})
+  const [config, setConfig] = useLocalStorage<Partial<AzureConfig>>('azure-config', {})
   const [activeTab, setActiveTab] = useState<'test' | 'settings'>('test')
   const [isConfigValid, setIsConfigValid] = useState(false)
 
