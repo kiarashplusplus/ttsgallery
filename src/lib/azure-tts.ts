@@ -1,5 +1,8 @@
 import type { AzureConfig, TTSRequest, TTSResponse } from '@/types/azure'
 
+// Constants
+const MAX_ERROR_TEXT_LENGTH = 200
+
 export class AzureTTSService {
   private config: AzureConfig
 
@@ -34,13 +37,28 @@ export class AzureTTSService {
 
       if (!response.ok) {
         const errorText = await response.text()
-        let errorMessage = `Azure API error: ${response.status}`
+        let errorMessage = `Azure API error (${response.status} ${response.statusText})`
         
         try {
           const errorJson = JSON.parse(errorText)
-          errorMessage = errorJson.error?.message || errorMessage
+          if (errorJson.error?.message) {
+            errorMessage = `${errorMessage}: ${errorJson.error.message}`
+          } else if (errorJson.message) {
+            errorMessage = `${errorMessage}: ${errorJson.message}`
+          }
         } catch {
-          errorMessage = errorText || errorMessage
+          if (errorText) {
+            // Truncate at word boundary and add ellipsis if text is too long
+            let finalText = errorText
+            if (errorText.length > MAX_ERROR_TEXT_LENGTH) {
+              const truncated = errorText.substring(0, MAX_ERROR_TEXT_LENGTH)
+              const lastSpace = truncated.lastIndexOf(' ')
+              finalText = lastSpace > 0
+                ? truncated.substring(0, lastSpace) + '...'
+                : truncated + '...'
+            }
+            errorMessage = `${errorMessage}: ${finalText}`
+          }
         }
 
         return {
@@ -56,9 +74,21 @@ export class AzureTTSService {
         audioUrl,
       }
     } catch (error) {
+      let errorMessage = 'Unknown error occurred'
+      
+      if (error instanceof Error) {
+        errorMessage = error.message
+        // Add more context for common network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          errorMessage = 'Network error: Unable to connect to Azure API'
+        } else if (error.name === 'AbortError') {
+          errorMessage = 'Request was aborted or timed out'
+        }
+      }
+      
       return {
         audioUrl: '',
-        error: error instanceof Error ? error.message : 'Unknown error occurred',
+        error: errorMessage,
       }
     }
   }

@@ -19,6 +19,27 @@ import { toast } from 'sonner'
 const TOTAL_PHASES = 2 // Generation + Playback
 const AUDIO_LOAD_TIMEOUT = 10000 // 10 seconds
 
+// MediaError codes mapping for user-friendly error messages
+const MEDIA_ERROR_MESSAGES: Record<number, string> = {
+  1: 'Playback was aborted',
+  2: 'Network error occurred while loading the audio',
+  3: 'Audio file is corrupted or not supported by your browser',
+  4: 'Audio format is not supported',
+}
+
+// Helper function to extract error details from HTMLAudioElement
+const getAudioErrorDetails = (audioElement: HTMLAudioElement): string => {
+  if (audioElement.error) {
+    const errorMessage = MEDIA_ERROR_MESSAGES[audioElement.error.code]
+    if (errorMessage) {
+      return errorMessage
+    }
+    // Fallback to error.message if available, otherwise use generic message
+    return audioElement.error.message || `Media error (code: ${audioElement.error.code})`
+  }
+  return 'Unknown audio error'
+}
+
 interface VoiceTesterProps {
   config: AzureConfig
 }
@@ -181,11 +202,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               resolveLoad()
             }
             
-            const onError = () => {
+            const onError = (event: Event) => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
               clearTimeout(timeoutId)
-              rejectLoad(new Error('Failed to load audio'))
+              const target = event.target as HTMLAudioElement
+              const errorDetails = getAudioErrorDetails(target)
+              rejectLoad(new Error(`Failed to load audio for ${voiceList[i].name}: ${errorDetails}`))
             }
             
             // Add listeners before calling load to avoid race condition
@@ -197,7 +220,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             timeoutId = setTimeout(() => {
               audio.removeEventListener('canplay', onCanPlay)
               audio.removeEventListener('error', onError)
-              rejectLoad(new Error('Audio load timeout'))
+              rejectLoad(new Error(`Audio load timeout for ${voiceList[i].name} after ${AUDIO_LOAD_TIMEOUT}ms`))
             }, AUDIO_LOAD_TIMEOUT)
           })
           
@@ -216,10 +239,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                 resolve()
               }
               
-              const onPlaybackError = (error: Event) => {
+              const onPlaybackError = (event: Event) => {
                 audio.removeEventListener('ended', onEnded)
                 audio.removeEventListener('error', onPlaybackError)
-                console.error(`Audio playback error for ${voiceList[i].name}:`, error)
+                const target = event.target as HTMLAudioElement
+                const errorDetails = getAudioErrorDetails(target)
+                console.error(`Audio playback error for ${voiceList[i].name}:`, errorDetails)
+                toast.error(`Playback failed for ${voiceList[i].name}: ${errorDetails}`)
                 resolve()
               }
               
@@ -228,7 +254,9 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             })
           }
         } catch (error) {
-          console.error(`Failed to play voice ${voiceList[i].name}:`, error)
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+          console.error(`Failed to play voice ${voiceList[i].name}:`, errorMessage)
+          toast.error(`Failed to play ${voiceList[i].name}: ${errorMessage}`)
           // Continue to next voice even if this one fails
         }
       }
