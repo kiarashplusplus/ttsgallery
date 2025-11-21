@@ -25,16 +25,21 @@ function App() {
   }, [config, activeTab])
 
   useEffect(() => {
-    // Load TikTok embed script
-    const script = document.createElement('script')
-    script.src = 'https://www.tiktok.com/embed.js'
-    script.async = true
-    document.body.appendChild(script)
+    // Load TikTok embed script if not already loaded
+    const existingScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]')
+    
+    if (!existingScript) {
+      const script = document.createElement('script')
+      script.src = 'https://www.tiktok.com/embed.js'
+      script.async = true
+      document.body.appendChild(script)
+    }
 
     return () => {
-      // Cleanup script on unmount
-      if (document.body.contains(script)) {
-        document.body.removeChild(script)
+      // Cleanup: Remove TikTok script on unmount
+      const scriptToRemove = document.querySelector('script[src="https://www.tiktok.com/embed.js"]')
+      if (scriptToRemove && scriptToRemove.parentNode) {
+        scriptToRemove.parentNode.removeChild(scriptToRemove)
       }
     }
   }, [])
@@ -84,12 +89,12 @@ function App() {
               >
                 @tts.gallery
               </a>
-              <p></p>
               <a 
                 target="_blank" 
                 title="♬ original sound - tts.gallery" 
                 href="https://www.tiktok.com/music/original-sound-7575220077163375382?refer=embed"
                 rel="noopener noreferrer"
+                className="mt-2 block"
               >
                 ♬ original sound - tts.gallery
               </a>
