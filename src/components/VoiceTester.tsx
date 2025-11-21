@@ -35,6 +35,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const [playMode, setPlayMode] = useState<'all' | 'top' | 'hd'>('all')
   const [isGeneratingBatch, setIsGeneratingBatch] = useState(false)
   const [generatedAudios, setGeneratedAudios] = useState<Map<string, string>>(new Map())
+  const [customPresetText, setCustomPresetText] = useState(playAllPresetText)
   
   const audioRef = useRef<HTMLAudioElement>(null)
   const ttsService = useRef(new AzureTTSService(config))
@@ -120,7 +121,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
       
       const result = await ttsService.current.generateSpeech({
         voice: voiceList[i].id,
-        text: playAllPresetText,
+        text: customPresetText,
       })
 
       if (result.error) {
@@ -192,7 +193,12 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           })
           
           // Play and wait for completion
-          await audio.play()
+          try {
+            await audio.play()
+          } catch (playError) {
+            console.error(`Failed to start playback for ${voiceList[i].name}:`, playError)
+            throw playError // Re-throw to be caught by outer try-catch
+          }
           
           await new Promise<void>((resolve) => {
             const onEnded = () => {
@@ -262,7 +268,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             <div className="flex-1">
               <Label className="text-sm font-medium mb-1 block">Batch Voice Comparison</Label>
               <p className="text-xs text-muted-foreground">
-                Play {playMode === 'all' ? `all ${defaultVoices.length}` : playMode === 'hd' ? `${hdVoices.length} HD` : `top ${topVoices.length}`} voices sequentially with preset text: "{playAllPresetText}"
+                Play {playMode === 'all' ? `all ${defaultVoices.length}` : playMode === 'hd' ? `${hdVoices.length} HD` : `top ${topVoices.length}`} voices sequentially with custom preset text
               </p>
             </div>
             <ToggleGroup 
@@ -281,6 +287,19 @@ export function VoiceTester({ config }: VoiceTesterProps) {
                 HD
               </ToggleGroupItem>
             </ToggleGroup>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="preset-text" className="text-xs">Preset Text for Batch Comparison</Label>
+            <input
+              id="preset-text"
+              type="text"
+              value={customPresetText}
+              onChange={(e) => setCustomPresetText(e.target.value)}
+              placeholder="Enter preset text..."
+              disabled={isPlayingAll || isGeneratingBatch}
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            />
           </div>
 
           {(isGeneratingBatch || (isPlayingAll && !isGeneratingBatch)) && (
@@ -411,13 +430,15 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           <div className="flex flex-col gap-2 p-4 bg-muted/50 rounded-lg">
             <Label className="text-sm font-medium">Audio Player</Label>
             <audio
-              ref={audioRef}
               src={audioUrl}
               controls
               className="w-full"
             />
           </div>
         )}
+
+        {/* Hidden audio element for batch playback */}
+        <audio ref={audioRef} className="hidden" />
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-4 bg-muted/30 rounded-lg max-h-48 overflow-y-auto">
           {defaultVoices.map((voice) => {
