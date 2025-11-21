@@ -30,8 +30,7 @@ const MEDIA_ERROR_MESSAGES: Record<number, string> = {
 // Helper function to extract error details from HTMLAudioElement
 const getAudioErrorDetails = (audioElement: HTMLAudioElement): string => {
   if (audioElement.error) {
-    const errorMessage = MEDIA_ERROR_MESSAGES[audioElement.error.code] || audioElement.error.message
-    return errorMessage
+    return MEDIA_ERROR_MESSAGES[audioElement.error.code] || audioElement.error.message
   }
   return 'Unknown audio error'
 }
