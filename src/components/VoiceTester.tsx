@@ -32,7 +32,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const [currentPlayingVoiceId, setCurrentPlayingVoiceId] = useState<string>('')
   const [generatingVoiceId, setGeneratingVoiceId] = useState<string>('')
   const [playAllProgress, setPlayAllProgress] = useState(0)
-  const [playMode, setPlayMode] = useState<'all' | 'top'>('all')
+  const [playMode, setPlayMode] = useState<'all' | 'top' | 'hd'>('all')
   const [isGeneratingBatch, setIsGeneratingBatch] = useState(false)
   const [generatedAudios, setGeneratedAudios] = useState<Map<string, string>>(new Map())
   
@@ -41,7 +41,12 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const cancelPlaybackRef = useRef(false)
 
   const topVoices = useMemo(() => defaultVoices.filter(v => v.isTop), [])
-  const voicesToPlay = useMemo(() => playMode === 'all' ? defaultVoices : topVoices, [playMode, topVoices])
+  const hdVoices = useMemo(() => defaultVoices.filter(v => v.type === 'hd'), [])
+  const voicesToPlay = useMemo(() => {
+    if (playMode === 'all') return defaultVoices
+    if (playMode === 'hd') return hdVoices
+    return topVoices
+  }, [playMode, topVoices, hdVoices])
   const voiceCount = voicesToPlay.length
 
   useEffect(() => {
@@ -186,9 +191,6 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             }, AUDIO_LOAD_TIMEOUT)
           })
           
-          // Update state after loading to avoid race condition
-          setAudioUrl(audioUrl)
-          
           // Play and wait for completion
           await audio.play()
           
@@ -259,13 +261,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             <div className="flex-1">
               <Label className="text-sm font-medium mb-1 block">Batch Voice Comparison</Label>
               <p className="text-xs text-muted-foreground">
-                Play {playMode === 'all' ? `all ${defaultVoices.length}` : `top ${topVoices.length}`} voices sequentially with preset text: "{playAllPresetText}"
+                Play {playMode === 'all' ? `all ${defaultVoices.length}` : playMode === 'hd' ? `${hdVoices.length} HD` : `top ${topVoices.length}`} voices sequentially with preset text: "{playAllPresetText}"
               </p>
             </div>
             <ToggleGroup 
               type="single" 
               value={playMode} 
-              onValueChange={(value) => value && setPlayMode(value as 'all' | 'top')}
+              onValueChange={(value) => value && setPlayMode(value as 'all' | 'top' | 'hd')}
               className="shrink-0"
             >
               <ToggleGroupItem value="all" aria-label="Play all voices" className="px-3">
@@ -273,6 +275,9 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               </ToggleGroupItem>
               <ToggleGroupItem value="top" aria-label="Play top voices" className="px-3">
                 Top
+              </ToggleGroupItem>
+              <ToggleGroupItem value="hd" aria-label="Play HD voices" className="px-3">
+                HD
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
@@ -320,7 +325,7 @@ export function VoiceTester({ config }: VoiceTesterProps) {
             ) : (
               <>
                 <ListChecks className="mr-2" size={18} />
-                Play {playMode === 'all' ? 'All' : 'Top'} Voices
+                Play {playMode === 'all' ? 'All' : playMode === 'hd' ? 'HD' : 'Top'} Voices
               </>
             )}
           </Button>
