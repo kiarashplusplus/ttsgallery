@@ -106,6 +106,13 @@ export function VoiceTester({ config }: VoiceTesterProps) {
       return
     }
 
+    // Validate preset text is not empty
+    if (!customPresetText.trim()) {
+      toast.error('Preset text cannot be empty')
+      setCustomPresetText(playAllPresetText) // Reset to default
+      return
+    }
+
     cancelPlaybackRef.current = false
     const voiceList = voicesToPlay
 
@@ -297,7 +304,19 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               id="preset-text"
               type="text"
               value={customPresetText}
-              onChange={(e) => setCustomPresetText(e.target.value)}
+              onChange={(e) => {
+                const newValue = e.target.value
+                // Only update if not empty, or if user is typing (allow temporarily empty while editing)
+                if (newValue.trim() || newValue === '') {
+                  setCustomPresetText(newValue)
+                }
+              }}
+              onBlur={(e) => {
+                // Reset to default if empty when losing focus
+                if (!e.target.value.trim()) {
+                  setCustomPresetText(playAllPresetText)
+                }
+              }}
               placeholder="Enter preset text..."
               disabled={isPlayingAll || isGeneratingBatch}
             />
