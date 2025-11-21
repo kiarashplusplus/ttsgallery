@@ -153,35 +153,58 @@ export function VoiceTester({ config }: VoiceTesterProps) {
         
         // Set src and wait for it to load before playing
         audio.src = audioUrl
-        await new Promise<void>((resolveLoad) => {
-          const onCanPlay = () => {
-            audio.removeEventListener('canplay', onCanPlay)
-            resolveLoad()
-          }
-          audio.addEventListener('canplay', onCanPlay)
-          audio.load()
-        })
         
-        // Update state after loading to avoid race condition
-        setAudioUrl(audioUrl)
-        
-        // Play and wait for completion
-        await audio.play()
-        
-        await new Promise<void>((resolve) => {
-          const onEnded = () => {
-            audio.removeEventListener('ended', onEnded)
-            resolve()
-          }
+        try {
+          await new Promise<void>((resolveLoad, rejectLoad) => {
+            const onCanPlay = () => {
+              audio.removeEventListener('canplay', onCanPlay)
+              audio.removeEventListener('error', onError)
+              resolveLoad()
+            }
+            
+            const onError = () => {
+              audio.removeEventListener('canplay', onCanPlay)
+              audio.removeEventListener('error', onError)
+              rejectLoad(new Error('Failed to load audio'))
+            }
+            
+            // Add listeners before calling load to avoid race condition
+            audio.addEventListener('canplay', onCanPlay)
+            audio.addEventListener('error', onError)
+            audio.load()
+            
+            // Add timeout to prevent indefinite hanging
+            setTimeout(() => {
+              audio.removeEventListener('canplay', onCanPlay)
+              audio.removeEventListener('error', onError)
+              rejectLoad(new Error('Audio load timeout'))
+            }, 10000) // 10 second timeout
+          })
           
-          const onError = () => {
-            audio.removeEventListener('error', onError)
-            resolve()
-          }
+          // Update state after loading to avoid race condition
+          setAudioUrl(audioUrl)
           
-          audio.addEventListener('ended', onEnded)
-          audio.addEventListener('error', onError)
-        })
+          // Play and wait for completion
+          await audio.play()
+          
+          await new Promise<void>((resolve) => {
+            const onEnded = () => {
+              audio.removeEventListener('ended', onEnded)
+              resolve()
+            }
+            
+            const onError = () => {
+              audio.removeEventListener('error', onError)
+              resolve()
+            }
+            
+            audio.addEventListener('ended', onEnded)
+            audio.addEventListener('error', onError)
+          })
+        } catch (error) {
+          console.error(`Failed to play voice ${voiceList[i].name}:`, error)
+          // Continue to next voice even if this one fails
+        }
       }
       
       await new Promise(resolve => setTimeout(resolve, 500))
