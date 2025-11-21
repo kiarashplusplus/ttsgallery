@@ -13,7 +13,7 @@ This guide will help you deploy TTS Gallery to various hosting platforms.
 
 ### Deploy to Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/tts-gallery)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kiarashplusplus/ttsgallery)
 
 1. Click the "Deploy" button above
 2. Connect your GitHub account
@@ -29,7 +29,7 @@ This guide will help you deploy TTS Gallery to various hosting platforms.
 
 ### Deploy to Netlify
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/tts-gallery)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/kiarashplusplus/ttsgallery)
 
 1. Click the "Deploy to Netlify" button above
 2. Connect your GitHub account

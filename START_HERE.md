@@ -1,5 +1,8 @@
 # 🎙️ TTS Gallery - Cloudflare Pages Deployment Package
 
+**Created by [Kiarash Adl](https://github.com/kiarashplusplus)**  
+**Repository**: [https://github.com/kiarashplusplus/ttsgallery](https://github.com/kiarashplusplus/ttsgallery)
+
 ## ✨ Package Complete!
 
 Your TTS Gallery project is now fully configured and documented for Cloudflare Pages deployment.

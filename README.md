@@ -10,6 +10,8 @@
 
 > 🎙️ **The complete Azure OpenAI TTS voice library at your fingertips**
 
+Created by [Kiarash Adl](https://github.com/kiarashplusplus)
+
 ## 🌟 Features at a Glance
 
 | Feature | Description |
@@ -61,6 +63,8 @@
 **Visit [tts.gallery](https://tts.gallery)** to use the application immediately!
 
 **New to TTS Gallery?** Check out the [Quick Start Guide](QUICKSTART.md) for a 5-minute tutorial.
+
+> ⚠️ **Before deploying your own instance**: This project requires `og-image.png` (1200×630px) and `screenshot.png` assets in the `public/` directory for proper SEO and social sharing. See [ASSETS.md](ASSETS.md) for detailed requirements and creation guidelines.
 
 ## 🚀 Getting Started
 
@@ -120,8 +124,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/tts-gallery.git
-cd tts-gallery
+git clone https://github.com/kiarashplusplus/ttsgallery.git
+cd ttsgallery
 
 # Install dependencies
 npm install
@@ -186,6 +190,8 @@ The application uses a professional Azure-themed color palette:
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+**Have ideas to improve this tool?** Visit the [GitHub repository](https://github.com/kiarashplusplus/ttsgallery) to share your suggestions or submit a pull request!
+
 Quick contribution steps:
 
 1. Fork the repository
@@ -202,6 +208,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
+- Created by [Kiarash Adl](https://github.com/kiarashplusplus)
 - Built with [Shadcn UI](https://ui.shadcn.com/)
 - Powered by [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 - Icons from [Phosphor Icons](https://phosphoricons.com/)
@@ -215,6 +222,15 @@ Ready to deploy your own instance? See [DEPLOYMENT.md](DEPLOYMENT.md) for detail
 - GitHub Pages
 - Custom domain setup for tts.gallery
 
+### Required Assets
+
+Before deploying, ensure you have created the following assets in your `public/` directory:
+
+- **og-image.png** (1200x630px) - Open Graph image for social media sharing
+- **screenshot.png** - Application screenshot for documentation and SEO
+
+These images are referenced in the HTML meta tags and structured data for optimal SEO and social sharing.
+
 ## 🌟 Star History
 
 If you find this project useful, please consider giving it a star on GitHub!
@@ -222,15 +238,16 @@ If you find this project useful, please consider giving it a star on GitHub!
 ## 📧 Support
 
 For issues related to:
-- **This application**: Open an issue in this repository
+- **This application**: Open an issue in the [GitHub repository](https://github.com/kiarashplusplus/ttsgallery/issues)
+- **Feature requests**: Share your ideas on [GitHub Discussions](https://github.com/kiarashplusplus/ttsgallery/discussions)
 - **Azure OpenAI Service**: Contact [Azure Support](https://azure.microsoft.com/en-us/support/)
 - **API access**: Check [Azure OpenAI documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/)
 
 ## 🔗 Links
 
 - **Live Application**: [tts.gallery](https://tts.gallery)
-- **GitHub Repository**: [github.com/yourusername/tts-gallery](https://github.com/yourusername/tts-gallery)
-- **Report Issues**: [GitHub Issues](https://github.com/yourusername/tts-gallery/issues)
+- **GitHub Repository**: [github.com/kiarashplusplus/ttsgallery](https://github.com/kiarashplusplus/ttsgallery)
+- **Report Issues**: [GitHub Issues](https://github.com/kiarashplusplus/ttsgallery/issues)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
@@ -239,7 +256,7 @@ For issues related to:
 
 **Note**: This application is not affiliated with or endorsed by Microsoft or Azure. It's a community-built tool for testing Azure OpenAI TTS voices.
 
-Made with ❤️ by the open-source community
+Made with ❤️ by [Kiarash Adl](https://github.com/kiarashplusplus)
 
 ## 🏷️ Topics
 

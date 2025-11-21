@@ -5,6 +5,14 @@ All notable changes to TTS Gallery will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+---
+
+**Repository**: [https://github.com/kiarashplusplus/ttsgallery](https://github.com/kiarashplusplus/ttsgallery)  
+**Creator**: [Kiarash Adl](https://github.com/kiarashplusplus)  
+**License**: MIT
+
+---
+
 ## [1.0.0] - 2024-01-01
 
 ### 🎉 Initial Release - TTS Gallery Launch

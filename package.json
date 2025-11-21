@@ -1,7 +1,28 @@
 {
-    "name": "spark-template",
+    "name": "ttsgallery",
+    "version": "1.0.0",
+    "description": "Azure OpenAI TTS Voice Sampler - Preview and compare all 23 text-to-speech voices",
+    "author": "Kiarash Adl <https://github.com/kiarashplusplus>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kiarashplusplus/ttsgallery.git"
+    },
+    "homepage": "https://tts.gallery",
+    "bugs": {
+        "url": "https://github.com/kiarashplusplus/ttsgallery/issues"
+    },
+    "keywords": [
+        "azure-openai",
+        "tts",
+        "text-to-speech",
+        "voice-sampler",
+        "gpt-4o-mini-tts",
+        "openai-voices",
+        "azure-tts",
+        "speech-synthesis"
+    ],
     "private": true,
-    "version": "0.0.0",
     "type": "module",
     "scripts": {
         "dev": "vite",

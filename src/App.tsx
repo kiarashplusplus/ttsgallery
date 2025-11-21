@@ -130,7 +130,7 @@ function App() {
           </p>
           <div className="flex items-center justify-center gap-3 text-xs flex-wrap">
             <a 
-              href="https://github.com/tts-gallery/tts-gallery" 
+              href="https://github.com/kiarashplusplus/ttsgallery" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-primary hover:underline font-medium"
@@ -154,7 +154,10 @@ function App() {
             <span>Local Credential Storage</span>
           </div>
           <p className="mt-4 text-xs">
-            Not affiliated with Microsoft or Azure • Built for developers and the AI community
+            Not affiliated with Microsoft or Azure • Created by <a href="https://github.com/kiarashplusplus" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Kiarash Adl</a>
+          </p>
+          <p className="mt-2 text-xs">
+            Have ideas to improve this tool? <a href="https://github.com/kiarashplusplus/ttsgallery/issues" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Share your feedback on GitHub</a>
           </p>
           <p className="mt-2 text-xs text-muted-foreground/70">
             Keywords: Azure OpenAI TTS, gpt-4o-mini-tts demo, OpenAI voices comparison, text-to-speech preview, 

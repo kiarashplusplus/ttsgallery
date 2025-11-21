@@ -38,8 +38,8 @@ We welcome feature suggestions! Please open an issue with:
 
 ```bash
 # Clone your fork
-git clone https://github.com/yourusername/tts-gallery.git
-cd tts-gallery
+git clone https://github.com/yourusername/ttsgallery.git
+cd ttsgallery
 
 # Install dependencies
 npm install
