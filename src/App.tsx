@@ -139,6 +139,15 @@ function App() {
             </a>
             <span>•</span>
             <a 
+              href="https://www.tiktok.com/@tts.gallery/video/7575220076723358998" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium"
+            >
+              Watch Demo Video
+            </a>
+            <span>•</span>
+            <a 
               href="https://opensource.org/licenses/MIT" 
               target="_blank" 
               rel="noopener noreferrer"
