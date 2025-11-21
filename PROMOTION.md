@@ -6,6 +6,8 @@
 
 This guide provides a comprehensive, actionable plan for promoting TTS Gallery across various platforms and communities.
 
+> **⚡ In a hurry?** Check out [PROMOTION_QUICK_START.md](PROMOTION_QUICK_START.md) for a condensed 5-minute action plan!
+
 ---
 
 ## 📋 Quick Start Checklist

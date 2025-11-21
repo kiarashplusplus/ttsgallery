@@ -245,7 +245,9 @@ Love TTS Gallery? Help us reach more developers:
 - 💬 **Recommend** it in developer communities
 - 🔗 **Link** to it in your documentation or tutorials
 
-Check out our [PROMOTION.md](PROMOTION.md) guide for pre-written templates and promotion ideas!
+**Want to help promote this project?** 
+- 🚀 Quick start: [PROMOTION_QUICK_START.md](PROMOTION_QUICK_START.md) - 5-minute action plan
+- 📚 Full guide: [PROMOTION.md](PROMOTION.md) - Complete promotion strategies and templates
 
 ## 📧 Support
 
