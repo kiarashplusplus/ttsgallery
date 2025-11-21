@@ -7,8 +7,9 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Play, Pause, ListChecks, SpeakerHigh, Warning, CheckCircle } from '@phosphor-icons/react'
-import { defaultVoices, defaultSampleText, type Voice } from '@/data/voices'
+import { defaultVoices, defaultSampleText, playAllPresetText, type Voice } from '@/data/voices'
 import { AzureTTSService } from '@/lib/azure-tts'
 import type { AzureConfig } from '@/types/azure'
 import { toast } from 'sonner'
@@ -26,6 +27,10 @@ export function VoiceTester({ config }: VoiceTesterProps) {
   const [isPlayingAll, setIsPlayingAll] = useState(false)
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number>(-1)
   const [playAllProgress, setPlayAllProgress] = useState(0)
+  const [playMode, setPlayMode] = useState<'all' | 'top'>('all')
+  const [isGeneratingBatch, setIsGeneratingBatch] = useState(false)
+  const [generatingVoiceIndex, setGeneratingVoiceIndex] = useState<number>(-1)
+  const [generatedAudios, setGeneratedAudios] = useState<Map<string, string>>(new Map())
   
   const audioRef = useRef<HTMLAudioElement>(null)
   const ttsService = useRef(new AzureTTSService(config))
@@ -75,25 +80,60 @@ export function VoiceTester({ config }: VoiceTesterProps) {
       setIsPlayingAll(false)
       setCurrentPlayingIndex(-1)
       setPlayAllProgress(0)
+      setIsGeneratingBatch(false)
+      setGeneratingVoiceIndex(-1)
       if (audioRef.current) {
         audioRef.current.pause()
       }
       return
     }
 
-    setIsPlayingAll(true)
-    setCurrentPlayingIndex(0)
-    setPlayAllProgress(0)
+    const voicesToPlay = playMode === 'all' 
+      ? defaultVoices 
+      : defaultVoices.filter(v => v.isTop)
 
-    for (let i = 0; i < defaultVoices.length; i++) {
+    // Phase 1: Batch generate all audio files
+    setIsGeneratingBatch(true)
+    setIsPlayingAll(true)
+    setPlayAllProgress(0)
+    const audioMap = new Map<string, string>()
+
+    for (let i = 0; i < voicesToPlay.length; i++) {
+      setGeneratingVoiceIndex(i)
+      setPlayAllProgress((i / (voicesToPlay.length * 2)) * 100)
+      
+      const result = await ttsService.current.generateSpeech({
+        voice: voicesToPlay[i].id,
+        text: playAllPresetText,
+      })
+
+      if (result.error) {
+        toast.error(`Failed to generate ${voicesToPlay[i].name}: ${result.error}`)
+      } else {
+        audioMap.set(voicesToPlay[i].id, result.audioUrl)
+      }
+    }
+
+    setGeneratedAudios(audioMap)
+    setIsGeneratingBatch(false)
+    setGeneratingVoiceIndex(-1)
+
+    // Phase 2: Play all generated audio files sequentially
+    for (let i = 0; i < voicesToPlay.length; i++) {
       if (!isPlayingAll && i > 0) break
       
       setCurrentPlayingIndex(i)
-      setPlayAllProgress((i / defaultVoices.length) * 100)
+      setPlayAllProgress(((voicesToPlay.length + i) / (voicesToPlay.length * 2)) * 100)
       
-      await handleGenerateSpeech(defaultVoices[i].id)
+      const audioUrl = audioMap.get(voicesToPlay[i].id)
+      if (!audioUrl) continue
+
+      setAudioUrl(audioUrl)
       
       if (audioRef.current) {
+        audioRef.current.src = audioUrl
+        await audioRef.current.play()
+        
         await new Promise<void>((resolve) => {
           const audio = audioRef.current!
           
@@ -115,10 +155,14 @@ export function VoiceTester({ config }: VoiceTesterProps) {
       await new Promise(resolve => setTimeout(resolve, 500))
     }
 
+    // Cleanup generated audio URLs
+    audioMap.forEach(url => URL.revokeObjectURL(url))
+    setGeneratedAudios(new Map())
+    
     setIsPlayingAll(false)
     setCurrentPlayingIndex(-1)
     setPlayAllProgress(100)
-    toast.success('Completed playing all voices!')
+    toast.success(`Completed playing ${playMode === 'all' ? 'all' : 'top'} voices!`)
   }
 
   const getVoiceTypeColor = (type: Voice['type']) => {
@@ -144,6 +188,79 @@ export function VoiceTester({ config }: VoiceTesterProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
+        {/* Play All Section - Now at the top */}
+        <div className="flex flex-col gap-3 p-4 bg-accent/10 rounded-lg border border-accent/20">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex-1">
+              <Label className="text-sm font-medium mb-1 block">Batch Voice Comparison</Label>
+              <p className="text-xs text-muted-foreground">
+                Play {playMode === 'all' ? 'all 23 voices' : 'top 9 voices'} sequentially with preset text: "{playAllPresetText}"
+              </p>
+            </div>
+            <ToggleGroup 
+              type="single" 
+              value={playMode} 
+              onValueChange={(value) => value && setPlayMode(value as 'all' | 'top')}
+              className="shrink-0"
+            >
+              <ToggleGroupItem value="all" aria-label="Play all voices" className="px-3">
+                All
+              </ToggleGroupItem>
+              <ToggleGroupItem value="top" aria-label="Play top voices" className="px-3">
+                Top
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+
+          {(isGeneratingBatch || (isPlayingAll && !isGeneratingBatch)) && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between text-sm">
+                {isGeneratingBatch ? (
+                  <>
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <div className="animate-spin h-3 w-3 border-2 border-accent border-t-transparent rounded-full" />
+                      Generating: {(playMode === 'all' ? defaultVoices : defaultVoices.filter(v => v.isTop))[generatingVoiceIndex]?.name}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {generatingVoiceIndex + 1} / {playMode === 'all' ? defaultVoices.length : defaultVoices.filter(v => v.isTop).length}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <Play className="animate-pulse" size={14} />
+                      Playing: {(playMode === 'all' ? defaultVoices : defaultVoices.filter(v => v.isTop))[currentPlayingIndex]?.name}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {currentPlayingIndex + 1} / {playMode === 'all' ? defaultVoices.length : defaultVoices.filter(v => v.isTop).length}
+                    </span>
+                  </>
+                )}
+              </div>
+              <Progress value={playAllProgress} className="h-2" />
+            </div>
+          )}
+
+          <Button
+            onClick={handlePlayAll}
+            disabled={isGenerating}
+            variant={isPlayingAll ? 'destructive' : 'default'}
+            className="w-full"
+          >
+            {isPlayingAll ? (
+              <>
+                <Pause className="mr-2" size={18} />
+                Stop {isGeneratingBatch ? 'Generating' : 'Playback'}
+              </>
+            ) : (
+              <>
+                <ListChecks className="mr-2" size={18} />
+                Play {playMode === 'all' ? 'All' : 'Top'} Voices
+              </>
+            )}
+          </Button>
+        </div>
+
         <div className="flex flex-col gap-2">
           <Label htmlFor="voice-select">Voice</Label>
           <Select value={selectedVoice} onValueChange={setSelectedVoice}>
@@ -199,20 +316,6 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           </Alert>
         )}
 
-        {isPlayingAll && (
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">
-                Playing: {defaultVoices[currentPlayingIndex]?.name}
-              </span>
-              <span className="text-muted-foreground">
-                {currentPlayingIndex + 1} / {defaultVoices.length}
-              </span>
-            </div>
-            <Progress value={playAllProgress} className="h-2" />
-          </div>
-        )}
-
         <div className="flex gap-2">
           <Button
             onClick={() => handleGenerateSpeech(selectedVoice)}
@@ -231,25 +334,6 @@ export function VoiceTester({ config }: VoiceTesterProps) {
               </>
             )}
           </Button>
-
-          <Button
-            onClick={handlePlayAll}
-            disabled={isGenerating || !sampleText.trim()}
-            variant={isPlayingAll ? 'destructive' : 'secondary'}
-            className="flex-1"
-          >
-            {isPlayingAll ? (
-              <>
-                <Pause className="mr-2" size={18} />
-                Stop All
-              </>
-            ) : (
-              <>
-                <ListChecks className="mr-2" size={18} />
-                Play All Voices
-              </>
-            )}
-          </Button>
         </div>
 
         {audioUrl && (
@@ -265,22 +349,36 @@ export function VoiceTester({ config }: VoiceTesterProps) {
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-4 bg-muted/30 rounded-lg max-h-48 overflow-y-auto">
-          {defaultVoices.map((voice, index) => (
-            <button
-              key={voice.id}
-              onClick={() => setSelectedVoice(voice.id)}
-              className={`
-                text-xs p-2 rounded border transition-all text-left
-                ${selectedVoice === voice.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50'}
-                ${currentPlayingIndex === index ? 'ring-2 ring-accent animate-pulse' : ''}
-              `}
-            >
-              <div className="font-medium">{voice.name}</div>
-              <Badge variant="outline" className={`text-[10px] mt-1 ${getVoiceTypeColor(voice.type)}`}>
-                {voice.type}
-              </Badge>
-            </button>
-          ))}
+          {defaultVoices.map((voice, index) => {
+            const isGenerating = isGeneratingBatch && generatingVoiceIndex === index
+            const isPlaying = !isGeneratingBatch && currentPlayingIndex === index && isPlayingAll
+            
+            return (
+              <button
+                key={voice.id}
+                onClick={() => setSelectedVoice(voice.id)}
+                className={`
+                  text-xs p-2 rounded border transition-all text-left
+                  ${selectedVoice === voice.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50'}
+                  ${isGenerating ? 'ring-2 ring-orange-500 animate-pulse' : ''}
+                  ${isPlaying ? 'ring-2 ring-accent animate-pulse' : ''}
+                `}
+              >
+                <div className="font-medium flex items-center gap-1">
+                  {voice.name}
+                  {isGenerating && (
+                    <div className="animate-spin h-3 w-3 border-2 border-orange-500 border-t-transparent rounded-full" />
+                  )}
+                  {isPlaying && (
+                    <Play className="animate-pulse" size={12} />
+                  )}
+                </div>
+                <Badge variant="outline" className={`text-[10px] mt-1 ${getVoiceTypeColor(voice.type)}`}>
+                  {voice.type}
+                </Badge>
+              </button>
+            )
+          })}
         </div>
       </CardContent>
     </Card>
