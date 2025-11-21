@@ -57,9 +57,14 @@ export function useLocalStorage<T>(
     }
     
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === key && e.newValue !== null) {
+      if (e.key === key) {
         try {
-          setStoredValue(JSON.parse(e.newValue))
+          // Handle deletion events by resetting to initial value
+          if (e.newValue === null) {
+            setStoredValue(initialValue)
+          } else {
+            setStoredValue(JSON.parse(e.newValue))
+          }
         } catch (error) {
           console.warn(`Error parsing storage event for key "${key}":`, error)
         }
@@ -68,7 +73,7 @@ export function useLocalStorage<T>(
 
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)
-  }, [key])
+  }, [key, initialValue])
 
   return [storedValue, setValue]
 }
