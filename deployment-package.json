@@ -1,0 +1,126 @@
+{
+  "name": "TTS Gallery - Cloudflare Pages Deployment Package",
+  "version": "1.0.0",
+  "description": "Production build configuration for tts.gallery on Cloudflare Pages",
+  "deployment": {
+    "platform": "Cloudflare Pages",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "nodeVersion": "18",
+    "framework": "Vite + React"
+  },
+  "files": {
+    "config": [
+      "wrangler.toml - Cloudflare Pages configuration",
+      "public/_redirects - SPA routing for Cloudflare",
+      "public/_headers - Security and caching headers"
+    ],
+    "documentation": [
+      "CLOUDFLARE_DEPLOYMENT.md - Complete deployment guide",
+      "BUILD.md - Build process documentation",
+      "DEPLOYMENT.md - Multi-platform deployment guide"
+    ],
+    "scripts": [
+      "build-for-cloudflare.sh - Automated build script"
+    ]
+  },
+  "buildProcess": {
+    "steps": [
+      "1. Install dependencies: npm install",
+      "2. Run build: npm run build",
+      "3. Output created in: dist/",
+      "4. Deploy dist/ to Cloudflare Pages"
+    ],
+    "verification": [
+      "Check dist/index.html exists",
+      "Check dist/_redirects exists",
+      "Check dist/_headers exists",
+      "Check dist/assets/ folder exists",
+      "Preview locally: npm run preview"
+    ]
+  },
+  "cloudflarePages": {
+    "projectName": "tts-gallery",
+    "productionBranch": "main",
+    "buildCommand": "npm run build",
+    "buildOutputDirectory": "dist",
+    "rootDirectory": "/",
+    "environmentVariables": "None required",
+    "customDomain": "tts.gallery",
+    "features": [
+      "Automatic deployments on push",
+      "Preview deployments for PRs",
+      "Rollback capability",
+      "Global CDN distribution",
+      "Free SSL certificate",
+      "DDoS protection",
+      "Web Analytics (optional)"
+    ]
+  },
+  "seo": {
+    "title": "TTS Gallery - Azure OpenAI TTS Voice Sampler | Preview All 23 Voices Free",
+    "description": "Free Azure OpenAI TTS voice sampler. Preview and compare all 23 voices including Alloy, Echo, Nova, and neural HD voices.",
+    "keywords": [
+      "Azure OpenAI TTS",
+      "gpt-4o-mini-tts",
+      "OpenAI voices demo",
+      "text-to-speech preview",
+      "TTS voice sampler"
+    ],
+    "files": [
+      "robots.txt - Search engine crawling rules",
+      "sitemap.xml - SEO sitemap for search engines",
+      "index.html - Comprehensive meta tags and structured data"
+    ]
+  },
+  "security": {
+    "headers": {
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "CSP": "Configured to allow Azure OpenAI endpoints"
+    },
+    "ssl": "Automatic via Cloudflare (Let's Encrypt)",
+    "credentials": "Stored locally in browser, never transmitted to tts.gallery servers"
+  },
+  "performance": {
+    "optimizations": [
+      "Vite build optimization",
+      "Tree shaking",
+      "Code splitting",
+      "CSS purging (Tailwind)",
+      "Asset compression",
+      "Cache headers",
+      "Lazy loading"
+    ],
+    "cdn": "Cloudflare global CDN (300+ locations)",
+    "compression": "Automatic Brotli/Gzip",
+    "expectedLoadTime": "< 2 seconds (first load), < 500ms (cached)"
+  },
+  "nextSteps": [
+    "1. Run: npm run build",
+    "2. Verify dist/ folder created",
+    "3. (Optional) Test locally: npm run preview",
+    "4. Push to GitHub",
+    "5. Connect repo to Cloudflare Pages",
+    "6. Wait for automatic deployment",
+    "7. Add custom domain: tts.gallery",
+    "8. Verify production site",
+    "9. Test with Azure OpenAI credentials",
+    "10. Share with the world! 🎉"
+  ],
+  "support": {
+    "documentation": {
+      "cloudflare": "CLOUDFLARE_DEPLOYMENT.md",
+      "build": "BUILD.md",
+      "general": "DEPLOYMENT.md",
+      "readme": "README.md"
+    },
+    "community": {
+      "issues": "GitHub Issues",
+      "cloudflare": "Cloudflare Community Forums",
+      "docs": "https://developers.cloudflare.com/pages/"
+    }
+  }
+}
