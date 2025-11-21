@@ -19,10 +19,19 @@ import { toast } from 'sonner'
 const TOTAL_PHASES = 2 // Generation + Playback
 const AUDIO_LOAD_TIMEOUT = 10000 // 10 seconds
 
+// MediaError codes mapping for user-friendly error messages
+const MEDIA_ERROR_MESSAGES: Record<number, string> = {
+  1: 'MEDIA_ERR_ABORTED - The user aborted the media playback',
+  2: 'MEDIA_ERR_NETWORK - A network error occurred while loading the media',
+  3: 'MEDIA_ERR_DECODE - The media is corrupted or not supported by your browser',
+  4: 'MEDIA_ERR_SRC_NOT_SUPPORTED - The media format is not supported',
+}
+
 // Helper function to extract error details from HTMLAudioElement
 const getAudioErrorDetails = (audioElement: HTMLAudioElement): string => {
   if (audioElement.error) {
-    return `${audioElement.error.code}: ${audioElement.error.message}`
+    const errorMessage = MEDIA_ERROR_MESSAGES[audioElement.error.code] || audioElement.error.message
+    return errorMessage
   }
   return 'Unknown audio error'
 }
