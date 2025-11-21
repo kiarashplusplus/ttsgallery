@@ -194,19 +194,19 @@ export function VoiceTester({ config }: VoiceTesterProps) {
           await new Promise<void>((resolve) => {
             const onEnded = () => {
               audio.removeEventListener('ended', onEnded)
-              audio.removeEventListener('error', onError)
+              audio.removeEventListener('error', onPlaybackError)
               resolve()
             }
             
-            const onError = (error: Event) => {
+            const onPlaybackError = (error: Event) => {
               audio.removeEventListener('ended', onEnded)
-              audio.removeEventListener('error', onError)
+              audio.removeEventListener('error', onPlaybackError)
               console.error(`Audio playback error for ${voiceList[i].name}:`, error)
               resolve()
             }
             
             audio.addEventListener('ended', onEnded)
-            audio.addEventListener('error', onError)
+            audio.addEventListener('error', onPlaybackError)
           })
         } catch (error) {
           console.error(`Failed to play voice ${voiceList[i].name}:`, error)
