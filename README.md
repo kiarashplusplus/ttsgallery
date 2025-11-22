@@ -62,6 +62,62 @@ Created by [Kiarash Adl](https://github.com/kiarashplusplus)
 
 **Visit [tts.gallery](https://tts.gallery)** to use the application immediately!
 
+**Watch the Demo:** See TTS Gallery in action on [TikTok](https://www.tiktok.com/@tts.gallery/video/7575220076723358998) 🎥
+
+<div align="center">
+  <blockquote 
+    class="tiktok-embed" 
+    cite="https://www.tiktok.com/@tts.gallery/video/7575220076723358998" 
+    data-video-id="7575220076723358998" 
+    data-embed-from="embed_page"
+    style="max-width: 605px;min-width: 325px;"
+  >
+    <section>
+      <a 
+        target="_blank" 
+        title="@tts.gallery" 
+        href="https://www.tiktok.com/@tts.gallery?refer=embed"
+      >
+        @tts.gallery
+      </a>
+      <p>
+        OpenAI voice sampler for 
+        <a 
+          title="developers" 
+          target="_blank" 
+          href="https://www.tiktok.com/tag/developers?refer=embed"
+        >
+          #developers
+        </a>
+        to try before choosing an 
+        <a 
+          title="azure" 
+          target="_blank" 
+          href="https://www.tiktok.com/tag/azure?refer=embed"
+        >
+          #azure
+        </a>
+        <a 
+          title="openai" 
+          target="_blank" 
+          href="https://www.tiktok.com/tag/openai?refer=embed"
+        >
+          #openAI
+        </a>
+        voice like Jade Hardy or Megan Wetherall
+      </p>
+      <a 
+        target="_blank" 
+        title="♬ original sound - tts.gallery" 
+        href="https://www.tiktok.com/music/original-sound-7575220047904328470?refer=embed"
+      >
+        ♬ original sound - tts.gallery
+      </a>
+    </section>
+  </blockquote>
+  <script async src="https://www.tiktok.com/embed.js"></script>
+</div>
+
 **New to TTS Gallery?** Check out the [Quick Start Guide](QUICKSTART.md) for a 5-minute tutorial.
 
 > ⚠️ **Before deploying your own instance**: This project requires `og-image.png` (1200×630px) and `screenshot.png` assets in the `public/` directory for proper SEO and social sharing. See [ASSETS.md](ASSETS.md) for detailed requirements and creation guidelines.
