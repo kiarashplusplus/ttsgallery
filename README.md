@@ -291,6 +291,20 @@ These images are referenced in the HTML meta tags and structured data for optima
 
 If you find this project useful, please consider giving it a star on GitHub!
 
+## 📣 Help Us Spread the Word
+
+Love TTS Gallery? Help us reach more developers:
+
+- ⭐ **Star** the repository on GitHub
+- 🐦 **Share** on Twitter/X with #TTSGallery
+- 📝 **Write** about it on your blog or social media
+- 💬 **Recommend** it in developer communities
+- 🔗 **Link** to it in your documentation or tutorials
+
+**Want to help promote this project?** 
+- 🚀 Quick start: [PROMOTION_QUICK_START.md](PROMOTION_QUICK_START.md) - 5-minute action plan
+- 📚 Full guide: [PROMOTION.md](PROMOTION.md) - Complete promotion strategies and templates
+
 ## 📧 Support
 
 For issues related to:
@@ -307,6 +321,7 @@ For issues related to:
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
+- **Promotion Guide**: [PROMOTION.md](PROMOTION.md) - Help spread the word!
 
 ---
 
