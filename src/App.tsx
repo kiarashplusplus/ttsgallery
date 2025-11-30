@@ -61,6 +61,16 @@ function App() {
           <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             TTS Gallery - Azure OpenAI Voice Sampler
           </h1>
+          <div className="mb-3">
+            <a 
+              href="https://kiarash-adl.pages.dev/" 
+              target="_blank"
+              rel="noopener"
+              className="text-sm text-primary hover:text-accent transition-colors inline-block font-medium"
+            >
+              Made by Kiarash Adl
+            </a>
+          </div>
           <p className="text-muted-foreground text-lg mb-2">
             Preview and compare all 23 Azure OpenAI text-to-speech voices
           </p>
